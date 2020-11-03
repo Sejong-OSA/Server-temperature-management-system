@@ -1,8 +1,11 @@
 import express from 'express';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const app = express();
 
-const PORT = 4000;
+const PORT = process.env.PORT;
 
 const home = app.get("/",(req,res)=>{
   res.send("hiasd");
