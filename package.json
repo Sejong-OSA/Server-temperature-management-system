@@ -1,0 +1,33 @@
+{
+  "name": "server-temperature-management-system",
+  "version": "1.0.0",
+  "description": "Server-temperature-management-system",
+  "main": "app.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "dependencies": {
+    "@babel/cli": "^7.12.1",
+    "@babel/core": "^7.12.3",
+    "@babel/node": "^7.12.1",
+    "@babel/polyfill": "^7.12.1",
+    "@babel/preset-env": "^7.12.1",
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.6"
+  },
+  "scripts": {
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sejong-OSA/Server-temperature-management-system.git"
+  },
+  "author": "OSA",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Sejong-OSA/Server-temperature-management-system/issues"
+  },
+  "homepage": "https://github.com/Sejong-OSA/Server-temperature-management-system#readme"
+}
