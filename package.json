@@ -19,7 +19,9 @@
     "helmet": "^4.2.0",
     "mongoose": "^5.10.11",
     "morgan": "^1.10.0",
-    "pug": "^3.0.0"
+    "mqtt": "^4.2.4",
+    "pug": "^3.0.0",
+    "socket.io": "^3.0.0"
   },
   "devDependencies": {
     "eslint": "^7.12.1",
