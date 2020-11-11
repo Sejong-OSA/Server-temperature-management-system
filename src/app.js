@@ -10,6 +10,7 @@ import mqtt from "mqtt";
 import socketIO from "socket.io";
 
 import { localMiddleware } from "./middlewares";
+import { socketController } from "./socketController";
 
 import globalRouter from "./router/globalRouter";
 import deviceRouter from "./router/deviceRouter";
@@ -17,6 +18,7 @@ import Dht11 from "./models/Dht11";
 import routes from "./routes";
 import "./db";
 import "./models/User";
+import csp from "./csp";
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -67,7 +69,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan("dev"));
 
 app.set("views", path.join(__dirname, "views"));
+app.use(express.static(path.join(__dirname, "static")));
 
+app.use(csp);
 app.use(localMiddleware);
 
 app.use(routes.home, globalRouter);

@@ -1,5 +1,6 @@
 const events = {
-  socket_evt_mqtt: "socket_evt_mqtt",
+  reqTempHum: "reqTempHum",
+  resTempHum: "resTempHum",
   socket_evt_led: "socket_evt_led",
 };
 
