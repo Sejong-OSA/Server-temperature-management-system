@@ -10,7 +10,7 @@ export const socketController = (socket, io) => {
       .sort({ _id: -1 })
       .limit(1)
       .then((data) => {
-        //console.log(JSON.stringify(data[0]));
+        console.log(`JSON.stringify(data[0]) : ${JSON.stringify(data[0])}`);
         socket.emit(events.socket_evt_mqtt, JSON.stringify(data[0]));
       });
   });

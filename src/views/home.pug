@@ -1,0 +1,14 @@
+extends layouts/main
+
+block content
+  h2 socket 이용한 DHT11(온도:습도) 모니터링 서비스
+  .msg
+    #mqtt_logs
+      ul.mqttlist
+  h2 socket 통신 방식(LED제어)
+  button(onclick="ledOnOff(1)") LED_ON
+  button(onclick="ledOnOff(2)") LED_OFF
+  h2 RESTfull Service 통신 방식(LED제어)
+  button(onclick="ajaxledOnOff(1)") LED_ON
+  button(onclick="ajaxledOnOff(2)") LED_OFF
+  div#led LED STATUS
