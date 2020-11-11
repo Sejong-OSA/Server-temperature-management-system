@@ -2,7 +2,7 @@ import events from "./events";
 import Dht11 from "./models/Dht11";
 import mqtt from "mqtt";
 
-const client = mqtt.connect("mqtt://192.168.0.13");
+const client = mqtt.connect(process.env.MQTT_URL);
 
 export const socketController = (socket, io) => {
   const broadcast = (event, data) => socket.broadcast.emit(event, data);

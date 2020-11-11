@@ -1,5 +1,3 @@
-/* eslint-disable no-undef */
-
 import { handleTempHum } from "./sensor";
 
 let socket = null;
@@ -11,5 +9,4 @@ export const initSocket = (aSocket) => {
   const { events } = window;
   socket = aSocket;
   socket.on(events.resTempHum, handleTempHum);
-  // socket.on(events.playerUpdate, handlePlayerUpdate);
 };

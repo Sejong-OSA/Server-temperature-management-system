@@ -51,7 +51,7 @@ const getMessage = async (topic, message) => {
   }
 };
 
-const client = mqtt.connect("mqtt://192.168.0.13");
+const client = mqtt.connect(process.env.MQTT_URL);
 
 const handleListening = () => {
   console.log(`✅ Listening : http://localhost:${PORT}`);
