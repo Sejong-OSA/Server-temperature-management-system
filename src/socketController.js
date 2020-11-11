@@ -1,5 +1,8 @@
 import events from "./events";
 import Dht11 from "./models/Dht11";
+import mqtt from "mqtt";
+
+const client = mqtt.connect("mqtt://192.168.0.13");
 
 export const socketController = (socket, io) => {
   const broadcast = (event, data) => socket.broadcast.emit(event, data);
@@ -16,8 +19,8 @@ export const socketController = (socket, io) => {
   });
 
   //웹에서 소켓을 이용한 LED ON/OFF 제어하기
-  socket.on(events.socket_evt_led, (data) => {
+  socket.on(events.commandLed, (data) => {
     const obj = JSON.parse(data);
-    client.publish("led", obj.led + "");
+    client.publish("led", obj.led);
   });
 };

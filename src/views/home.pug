@@ -6,10 +6,9 @@ block content
     ul
       li.temp Temparature: 0
       li.hum Huminity: 0
-  h2 socket 통신 방식(LED제어)
-  button(onclick="ledOnOff(1)") LED_ON
-  button(onclick="ledOnOff(2)") LED_OFF
-  h2 RESTfull Service 통신 방식(LED제어)
-  button(onclick="ajaxledOnOff(1)") LED_ON
-  button(onclick="ajaxledOnOff(2)") LED_OFF
-  div#led LED STATUS
+  .Contorler
+    .led
+      h2 socket 통신 방식(LED제어)
+      button#jsLedOn(name="1") LED ON
+      button#jsLedOff(name="2") LED OFF
+    #jsLedStatus LED STATUS : LED OFF
