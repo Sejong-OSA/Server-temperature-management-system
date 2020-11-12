@@ -1,10 +1,7 @@
-import routes from './routes';
-import dotenv from 'dotenv';
-
-dotenv.config();
+import routes from "./routes";
 
 export const localMiddleware = (req, res, next) => {
-  res.locals.siteName = 'ServerMonitoring';
+  res.locals.siteName = "ServerMonitoring";
   res.locals.routes = routes;
   next();
 };

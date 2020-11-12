@@ -9,19 +9,22 @@ import cookieParser from "cookie-parser";
 import mqtt from "mqtt";
 import socketIO from "socket.io";
 
-import { localMiddleware } from "./middlewares";
-import { socketController } from "./socketController";
+import "./global";
+import "./db";
+import "./models/User";
 
 import globalRouter from "./router/globalRouter";
 import deviceRouter from "./router/deviceRouter";
 import Dht11 from "./models/Dht11";
 import routes from "./routes";
-import "./db";
-import "./models/User";
 import csp from "./csp";
+
+import { localMiddleware } from "./middlewares";
+import { socketController } from "./socketController";
 
 const app = express();
 const PORT = process.env.PORT || 4000;
+const tempTopic = "dht11";
 
 const getMessage = async (topic, message) => {
   const obj = JSON.parse(message);
@@ -51,7 +54,24 @@ const getMessage = async (topic, message) => {
   }
 };
 
-const client = mqtt.connect(process.env.MQTT_URL);
+const connectOptions = {
+  host: conf.cse.host,
+  port: conf.cse.mqttport,
+  //              username: 'keti',
+  //              password: 'keti123',
+  protocol: "mqtt",
+  keepalive: 10,
+  //              clientId: serverUID,
+  protocolId: "MQTT",
+  protocolVersion: 4,
+  clean: true,
+  reconnectPeriod: 2000,
+  connectTimeout: 2000,
+  rejectUnauthorized: false,
+};
+
+// const client = mqtt.connect(process.env.MQTT_URL);
+const client = mqtt.connect(connectOptions);
 
 const handleListening = () => {
   console.log(`✅ Listening : http://localhost:${PORT}`);
@@ -79,7 +99,8 @@ app.use(routes.device, deviceRouter);
 
 client.on("connect", () => {
   console.log("✅ mqtt connect");
-  client.subscribe("dht11");
+  client.subscribe(tempTopic);
+  console.log(`subscribe ${tempTopic}`);
 });
 
 client.on("message", getMessage);
