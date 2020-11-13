@@ -1,0 +1,16 @@
+doctype html
+html(lang="en")
+  head
+    link(rel="stylesheet",
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css")
+    title #{siteName} | #{pageTitle}
+    link(rel="stylesheet",href="styles/styles.css")
+  body
+    include ../partials/header
+    main
+      block content
+    include ../partials/footer
+    script.
+      window.events = !{events}
+    script(src="/socket.io/socket.io.js")
+    script(src="/js/main.js")

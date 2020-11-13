@@ -1,0 +1,64 @@
+{
+  "name": "server-temperature-management-system",
+  "version": "1.0.0",
+  "description": "Server-temperature-management-system",
+  "main": "app.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "dependencies": {
+    "@babel/cli": "^7.12.1",
+    "@babel/core": "^7.12.3",
+    "@babel/node": "^7.12.1",
+    "@babel/polyfill": "^7.12.1",
+    "@babel/preset-env": "^7.12.1",
+    "babelify": "^10.0.0",
+    "body-parser": "^1.19.0",
+    "cbor": "^5.1.0",
+    "cookie-parser": "^1.4.5",
+    "del": "^6.0.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "gulp": "^4.0.2",
+    "gulp-autoprefixer": "^7.0.1",
+    "gulp-browserify": "^0.5.1",
+    "gulp-csso": "^4.0.1",
+    "gulp-sass": "^4.1.0",
+    "hashmap": "^2.4.0",
+    "helmet": "^4.2.0",
+    "ip": "^1.1.5",
+    "js2xmlparser": "^4.0.1",
+    "mongoose": "^5.10.11",
+    "morgan": "^1.10.0",
+    "mqtt": "^4.2.4",
+    "node-sass": "^5.0.0",
+    "pug": "^3.0.0",
+    "shortid": "^2.2.16",
+    "socket.io": "^3.0.0",
+    "xml2js": "^0.4.23"
+  },
+  "devDependencies": {
+    "eslint": "^7.12.1",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-config-prettier": "^6.15.0",
+    "eslint-plugin-html": "^6.1.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-prettier": "^3.1.4",
+    "nodemon": "^2.0.6",
+    "prettier": "^2.1.2"
+  },
+  "scripts": {
+    "dev:server": "nodemon --exec babel-node src/app.js --ignore src/assets --ignore src/static",
+    "dev:assets": "gulp"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sejong-OSA/Server-temperature-management-system.git"
+  },
+  "author": "OSA",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Sejong-OSA/Server-temperature-management-system/issues"
+  },
+  "homepage": "https://github.com/Sejong-OSA/Server-temperature-management-system#readme"
+}
