@@ -1,4 +1,4 @@
-import events from "../events";
+import events from "../sockets/events";
 
 export const home = async (req, res) => {
   try {

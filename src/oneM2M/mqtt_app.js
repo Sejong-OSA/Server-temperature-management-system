@@ -96,8 +96,6 @@ const mqtt_message_handler = async (topic, message) => {
       try {
         if (obj.dataType === "temp") {
           const temp = new Temp({
-            // tmp: obj.tmp,
-            // hum: obj.hum,
             dataType: obj.dataType,
             data: obj.data,
             created_at: obj.created_at,

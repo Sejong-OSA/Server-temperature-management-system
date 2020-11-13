@@ -21,7 +21,7 @@ import routes from "./routes";
 import csp from "./csp";
 
 import { localMiddleware } from "./middlewares";
-import { socketController } from "./socketController";
+import { socketController } from "./sockets/socketController";
 
 const app = express();
 const PORT = process.env.PORT || 4000;

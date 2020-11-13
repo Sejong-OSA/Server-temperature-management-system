@@ -1,8 +1,8 @@
 import events from "./events";
-import Temp from "./models/Temp";
-import Hum from "./models/Hum";
+import Temp from "../models/Temp";
+import Hum from "../models/Hum";
 import request from "request";
-import mqtt from "mqtt";
+// import mqtt from "mqtt";
 
 // const connectOptions = {
 //   host: conf.cse.host,
@@ -20,9 +20,9 @@ import mqtt from "mqtt";
 //   rejectUnauthorized: false,
 // };
 
-import hashmap from "hashmap";
+// import hashmap from "hashmap";
 
-const map = new hashmap();
+// const map = new hashmap();
 
 // const client = mqtt.connect(connectOptions);
 const cse = {};
@@ -37,14 +37,14 @@ cse.name = "Mobius";
 // build ae
 ae.name = "SERVER_ROOM";
 
-const createContentInstance = ({ data, actuator }) => {
+export const createContentInstance = ({ data, actuator }) => {
   const cseURL = `http://${cse.host}:${cse.port}`;
   const con = data;
   const cseRelease = "1";
-  const object = {
-    type: "led",
-    data: con,
-  };
+  // const object = {
+  //   type: "led",
+  //   data: con,
+  // };
 
   let devices = [];
   let requestNr = 0;
@@ -111,6 +111,14 @@ export const socketController = (socket, io) => {
       .sort({ _id: -1 })
       .limit(1)
       .then((data) => {
+        const temp = Number(data[0].data);
+        if (temp >= 26 || temp <= 18) {
+          const obj = {
+            data: "1",
+            actuator: "led",
+          };
+          // createContentInstance(obj);
+        }
         socket.emit(events.resTemp, JSON.stringify(data[0]));
       });
   });
@@ -120,6 +128,14 @@ export const socketController = (socket, io) => {
       .sort({ _id: -1 })
       .limit(1)
       .then((data) => {
+        const hum = Number(data[0].data);
+        if (hum >= 60 || hum <= 40) {
+          const obj = {
+            data: "1",
+            actuator: "led",
+          };
+          // createContentInstance(obj);
+        }
         socket.emit(events.resHum, JSON.stringify(data[0]));
       });
   });
