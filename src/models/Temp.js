@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const Dht11Schema = mongoose.Schema({
+const TempSchema = mongoose.Schema({
   // tmp: {
   //   type: String,
   //   required: true,
@@ -9,6 +9,10 @@ const Dht11Schema = mongoose.Schema({
   //   type: String,
   //   required: true,
   // },
+  dataType: {
+    type: String,
+    required: true,
+  },
   data: {
     type: String,
     required: true,
@@ -20,6 +24,6 @@ const Dht11Schema = mongoose.Schema({
   },
 });
 
-const model = mongoose.model("Dht11", Dht11Schema);
+const model = mongoose.model("Temp", TempSchema);
 
 export default model;

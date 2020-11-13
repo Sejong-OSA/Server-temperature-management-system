@@ -16,7 +16,7 @@ import "./oneM2M/mqtt_app";
 
 import globalRouter from "./router/globalRouter";
 import deviceRouter from "./router/deviceRouter";
-import Dht11 from "./models/Dht11";
+// import Temp from "./models/Temp";
 import routes from "./routes";
 import csp from "./csp";
 
@@ -25,53 +25,54 @@ import { socketController } from "./socketController";
 
 const app = express();
 const PORT = process.env.PORT || 4000;
-const tempTopic = "dht11";
+// const tempTopic = "temp";
+// const humTopic = "hum";
 
-export const getMessage = async (topic, message) => {
-  const obj = JSON.parse(message);
-  const date = new Date();
-  const year = date.getFullYear();
-  const month = date.getMonth();
-  const today = date.getDate();
-  const hours = date.getHours();
-  const minutes = date.getMinutes();
-  const seconds = date.getSeconds();
-  obj.created_at = new Date(
-    Date.UTC(year, month, today, hours, minutes, seconds)
-  );
-  console.log(obj);
+// const getMessage = async (topic, message) => {
+//   const obj = JSON.parse(message);
+//   const date = new Date();
+//   const year = date.getFullYear();
+//   const month = date.getMonth();
+//   const today = date.getDate();
+//   const hours = date.getHours();
+//   const minutes = date.getMinutes();
+//   const seconds = date.getSeconds();
+//   obj.created_at = new Date(
+//     Date.UTC(year, month, today, hours, minutes, seconds)
+//   );
+//   console.log(obj);
 
-  const dht11 = new Dht11({
-    tmp: obj.tmp,
-    hum: obj.hum,
-    created_at: obj.created_at,
-  });
+//   const temp = new Temp({
+//     tmp: obj.tmp,
+//     hum: obj.hum,
+//     created_at: obj.created_at,
+//   });
 
-  try {
-    const saveDHT11 = await dht11.save();
-    console.log("insert OK");
-  } catch (err) {
-    console.log({ message: err });
-  }
-};
+//   try {
+//     const saveTemp = await temp.save();
+//     console.log("insert OK");
+//   } catch (err) {
+//     console.log({ message: err });
+//   }
+// };
 
-const connectOptions = {
-  host: conf.cse.host,
-  port: conf.cse.mqttport,
-  //              username: 'keti',
-  //              password: 'keti123',
-  protocol: "mqtt",
-  keepalive: 10,
-  //              clientId: serverUID,
-  protocolId: "MQTT",
-  protocolVersion: 4,
-  clean: true,
-  reconnectPeriod: 2000,
-  connectTimeout: 2000,
-  rejectUnauthorized: false,
-};
+// const connectOptions = {
+//   host: conf.cse.host,
+//   port: conf.cse.mqttport,
+//   //              username: 'keti',
+//   //              password: 'keti123',
+//   protocol: "mqtt",
+//   keepalive: 10,
+//   //              clientId: serverUID,
+//   protocolId: "MQTT",
+//   protocolVersion: 4,
+//   clean: true,
+//   reconnectPeriod: 2000,
+//   connectTimeout: 2000,
+//   rejectUnauthorized: false,
+// };
 
-const client = mqtt.connect(connectOptions);
+// const client = mqtt.connect(connectOptions);
 
 const handleListening = () => {
   console.log(`✅ Listening : http://localhost:${PORT}`);
@@ -97,18 +98,19 @@ app.use(localMiddleware);
 app.use(routes.home, globalRouter);
 app.use(routes.device, deviceRouter);
 
-client.on("connect", () => {
-  console.log("✅ mqtt connect");
-  // client.subscribe(tempTopic);
-  console.log(`subscribe ${tempTopic}`);
-  sh_state = "crtae";
-});
+// client.on("connect", () => {
+//   console.log("✅ mqtt connect");
+//   // client.subscribe(tempTopic);
+//   console.log(`subscribe ${tempTopic}`);
+//   console.log(`subscribe ${humTopic}`);
+//   sh_state = "crtae";
+// });
 
-client.once("error", (error) => {
-  console.log(error);
-});
+// client.once("error", (error) => {
+//   console.log(error);
+// });
 
-client.on("message", getMessage);
+// client.on("message", getMessage);
 
 const server = app.listen(PORT, handleListening);
 const io = socketIO(server);

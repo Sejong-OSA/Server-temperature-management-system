@@ -1,5 +1,6 @@
 import events from "./events";
-import Dht11 from "./models/Dht11";
+import Temp from "./models/Temp";
+import Hum from "./models/Hum";
 import mqtt from "mqtt";
 
 const connectOptions = {
@@ -25,12 +26,21 @@ export const socketController = (socket, io) => {
   const superBroadcast = (event, data) => io.emit(event, data);
 
   //웹에서 소켓을 이용한 DHT11 센서데이터 모니터링
-  socket.on(events.reqTempHum, () => {
-    Dht11.find({})
+  socket.on(events.reqTemp, () => {
+    Temp.find({})
       .sort({ _id: -1 })
       .limit(1)
       .then((data) => {
-        socket.emit(events.resTempHum, JSON.stringify(data[0]));
+        socket.emit(events.resTemp, JSON.stringify(data[0]));
+      });
+  });
+
+  socket.on(events.reqHum, () => {
+    Hum.find({})
+      .sort({ _id: -1 })
+      .limit(1)
+      .then((data) => {
+        socket.emit(events.resHum, JSON.stringify(data[0]));
       });
   });
 

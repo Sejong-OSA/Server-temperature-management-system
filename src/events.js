@@ -1,6 +1,8 @@
 const events = {
-  reqTempHum: "reqTempHum",
-  resTempHum: "resTempHum",
+  reqTemp: "reqTemp",
+  reqHum: "reqHum",
+  resTemp: "resTemp",
+  resHum: "resHum",
   commandLed: "commandLed",
 };
 

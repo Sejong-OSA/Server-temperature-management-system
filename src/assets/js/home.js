@@ -6,7 +6,8 @@ initSocket(aSocket);
 let timer = null;
 
 const timer1 = () => {
-  getSocket().emit(window.events.reqTempHum);
+  getSocket().emit(window.events.reqTemp);
+  getSocket().emit(window.events.reqHum);
 };
 
 if (timer == null) {

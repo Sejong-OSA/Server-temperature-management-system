@@ -15,7 +15,9 @@
 
 // var util = require("util");
 // var url = require("url");
-import Dht11 from "../models/Dht11";
+import Temp from "../models/Temp";
+import Hum from "../models/Hum";
+
 var fs = require("fs");
 var mqtt = require("mqtt");
 var xml2js = require("xml2js");
@@ -28,12 +30,11 @@ var reg_resp_topic = "/oneM2M/reg_resp/" + conf.ae.id + "/+/#";
 var resp_topic = "/oneM2M/resp/" + conf.ae.id + "/+/#";
 var noti_topic = "/oneM2M/req/+/" + conf.ae.id + "/#";
 
-// const Dht11 = require("../models/Dht11");
 global.sh_adn = require("./mqtt_adn");
 var noti = require("./noti");
 // var tas = require("./thyme_tas");
 
-const getMessage = async (topic, message) => {
+const mqtt_message_handler = async (topic, message) => {
   var topic_arr = topic.split("/");
   var bodytype = conf.ae.bodytype;
   let jsonObj = null;
@@ -68,16 +69,14 @@ const getMessage = async (topic, message) => {
   ) {
     // json
     jsonObj = JSON.parse(message.toString());
-    console.log(jsonObj.pc["m2m:sgn"].nev.rep["m2m:cin"]);
+
     if (jsonObj.pc["m2m:sgn"].nev.rep["m2m:cin"] !== undefined) {
       const sensorData = jsonObj.pc["m2m:sgn"].nev.rep["m2m:cin"].con;
+      const dataType = jsonObj.pc["m2m:sgn"].sur.split("/");
       console.log("jsonObj()===============");
-      console.log(sensorData);
+      console.log(dataType[2]);
 
       const obj = {};
-
-      obj.data = sensorData;
-
       const date = new Date();
       const year = date.getFullYear();
       const month = date.getMonth();
@@ -85,21 +84,34 @@ const getMessage = async (topic, message) => {
       const hours = date.getHours();
       const minutes = date.getMinutes();
       const seconds = date.getSeconds();
+
+      obj.dataType = dataType[2];
+      obj.data = sensorData;
       obj.created_at = new Date(
         Date.UTC(year, month, today, hours, minutes, seconds)
       );
 
       console.log(obj);
 
-      const dht11 = new Dht11({
-        // tmp: obj.tmp,
-        // hum: obj.hum,
-        data: obj.data,
-        created_at: obj.created_at,
-      });
-
       try {
-        const saveDHT11 = await dht11.save();
+        if (obj.dataType === "temp") {
+          const temp = new Temp({
+            // tmp: obj.tmp,
+            // hum: obj.hum,
+            dataType: obj.dataType,
+            data: obj.data,
+            created_at: obj.created_at,
+          });
+          const saveTemp = await temp.save();
+        } else if (obj.dataType === "hum") {
+          const hum = new Hum({
+            dataType: obj.dataType,
+            data: obj.data,
+            created_at: obj.created_at,
+          });
+          const saveHum = await hum.save();
+        }
+
         console.log("insert OK");
       } catch (err) {
         console.log({ message: err });
@@ -165,7 +177,6 @@ mqtt_client.on("connect", function () {
 });
 
 mqtt_client.on("message", mqtt_message_handler);
-mqtt_client.on("message", getMessage);
 
 function mqtt_callback(jsonObj) {
   for (var i = 0; i < resp_mqtt_ri_arr.length; i++) {
@@ -184,113 +195,6 @@ function mqtt_callback(jsonObj) {
       resp_mqtt_ri_arr.splice(i, 1);
       break;
     }
-  }
-}
-
-function mqtt_message_handler(topic, message) {
-  var topic_arr = topic.split("/");
-  var bodytype = conf.ae.bodytype;
-  if (topic_arr[5] != null) {
-    bodytype =
-      topic_arr[5] === "xml"
-        ? topic_arr[5]
-        : topic_arr[5] === "json"
-        ? topic_arr[5]
-        : topic_arr[5] === "cbor"
-        ? topic_arr[5]
-        : "json";
-  }
-
-  console.log(message.toString());
-
-  if (
-    topic_arr[1] == "oneM2M" &&
-    (topic_arr[2] == "resp" || topic_arr[2] == "reg_resp") &&
-    topic_arr[3].replace(":", "/") == conf.ae.id
-  ) {
-    if (bodytype === "xml") {
-      var parser = new xml2js.Parser({ explicitArray: false });
-      parser.parseString(message.toString(), function (err, jsonObj) {
-        if (err) {
-          console.log("[mqtt-resp xml2js parser error]");
-        } else {
-          if (jsonObj["m2m:rsp"] != null) {
-            mqtt_callback(jsonObj);
-          } else {
-            NOPRINT === "true"
-              ? (NOPRINT = "true")
-              : console.log("[pxymqtt-resp] message is not resp");
-            noti.response_mqtt(
-              topic_arr[4],
-              4000,
-              "",
-              conf.ae.id,
-              rqi,
-              "<h1>fail to parsing mqtt message</h1>"
-            );
-          }
-        }
-      });
-    } else if (bodytype === "cbor") {
-      var encoded = message.toString();
-      cbor.decodeFirst(encoded, function (err, jsonObj) {
-        if (err) {
-          console.log("[mqtt-resp cbor parser error]");
-        } else {
-          if (jsonObj["m2m:rsp"] == null) {
-            jsonObj["m2m:rsp"] = jsonObj;
-          }
-
-          mqtt_callback(jsonObj);
-        }
-      });
-    } else {
-      // 'json'
-      var jsonObj = JSON.parse(message.toString());
-
-      if (jsonObj["m2m:rsp"] == null) {
-        jsonObj["m2m:rsp"] = jsonObj;
-      }
-
-      mqtt_callback(jsonObj);
-    }
-  } else if (
-    topic_arr[1] == "oneM2M" &&
-    topic_arr[2] == "req" &&
-    topic_arr[4] == conf.ae.id
-  ) {
-    if (bodytype == "xml") {
-      parser = new xml2js.Parser({ explicitArray: false });
-      parser.parseString(message.toString(), function (err, jsonObj) {
-        if (err) {
-          console.log("[mqtt noti xml2js parser error]");
-        } else {
-          if (jsonObj["m2m:rqp"].op == "5" || jsonObj["m2m:rqp"].op == 5) {
-            noti.mqtt_noti_action(topic_arr, jsonObj);
-          }
-        }
-      });
-    } else if (bodytype === "cbor") {
-      encoded = message.toString();
-      cbor.decodeFirst(encoded, function (err, jsonObj) {
-        if (err) {
-          console.log("[mqtt noti cbor parser error]");
-        } else {
-          noti.mqtt_noti_action(topic_arr, jsonObj);
-        }
-      });
-    } else {
-      // json
-      jsonObj = JSON.parse(message.toString());
-
-      if (jsonObj["m2m:rqp"] == null) {
-        jsonObj["m2m:rqp"] = jsonObj;
-      }
-
-      noti.mqtt_noti_action(topic_arr, jsonObj);
-    }
-  } else {
-    console.log("topic is not supported");
   }
 }
 
