@@ -58,7 +58,7 @@ export const createContentInstance = ({ data, actuator }) => {
   // });
 
   // if (map.has(actuator)) {
-  console.log("map.has");
+
   console.log("\n[REQUEST]");
 
   // map.set(actuator, object);

@@ -101,6 +101,7 @@ const mqtt_message_handler = async (topic, message) => {
             created_at: obj.created_at,
           });
           const saveTemp = await temp.save();
+          console.log("insert OK");
         } else if (obj.dataType === "hum") {
           const hum = new Hum({
             dataType: obj.dataType,
@@ -108,9 +109,18 @@ const mqtt_message_handler = async (topic, message) => {
             created_at: obj.created_at,
           });
           const saveHum = await hum.save();
+          console.log("insert OK");
+        } else if (obj.dataType === "fan") {
+          // const hum = new Hum({
+          //   dataType: obj.dataType,
+          //   data: obj.data,
+          //   created_at: obj.created_at,
+          // });
+          // const saveHum = await hum.save();
+          // console.log("insert OK");
+          mqtt_client.publish("led", obj.data);
+          console.log("publish");
         }
-
-        console.log("insert OK");
       } catch (err) {
         console.log({ message: err });
       }

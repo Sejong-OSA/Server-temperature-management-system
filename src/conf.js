@@ -86,8 +86,8 @@ sub_arr[count++].nu = "mqtt://" + cse.host + "/" + ae.id + "?ct=" + ae.bodytype;
 
 // Publish Fan
 sub_arr[count] = {};
-sub_arr[count].parent = "/" + cse.name + "/" + ae.name + "/" + cnt_arr[1].name;
-sub_arr[count].name = "pubFan";
+sub_arr[count].parent = "/" + cse.name + "/" + ae.name + "/" + cnt_arr[2].name;
+sub_arr[count].name = "subFan";
 sub_arr[count++].nu = "mqtt://" + cse.host + "/" + ae.id + "?ct=" + ae.bodytype; // mqtt
 
 //sub_arr[count++].nu = 'http://' + ip.address() + ':' + ae.port + '/noti?ct=json'; // http
