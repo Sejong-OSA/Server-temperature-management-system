@@ -8,10 +8,11 @@ const handleLedOnOff = (event) => {
   const {
     target: { name },
   } = event;
-  const data = JSON.stringify({ led: name });
+  // const data = JSON.stringify({ led: name });
+  const data = name;
 
   // {"led":1}, {"led":2}
-  getSocket().emit(window.events.commandLed, data);
+  getSocket().emit(window.events.commandLed, { data, actuator: "led" });
   ledStatus.innerHTML = `LED STATUS : LED ${name === "1" ? "ON" : "OFF"}`;
 };
 

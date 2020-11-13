@@ -24,6 +24,7 @@
     "gulp-browserify": "^0.5.1",
     "gulp-csso": "^4.0.1",
     "gulp-sass": "^4.1.0",
+    "hashmap": "^2.4.0",
     "helmet": "^4.2.0",
     "ip": "^1.1.5",
     "js2xmlparser": "^4.0.1",
