@@ -2,7 +2,23 @@ import events from "./events";
 import Dht11 from "./models/Dht11";
 import mqtt from "mqtt";
 
-const client = mqtt.connect(process.env.MQTT_URL);
+const connectOptions = {
+  host: conf.cse.host,
+  port: conf.cse.mqttport,
+  //              username: 'keti',
+  //              password: 'keti123',
+  protocol: "mqtt",
+  keepalive: 10,
+  //              clientId: serverUID,
+  protocolId: "MQTT",
+  protocolVersion: 4,
+  clean: true,
+  reconnectPeriod: 2000,
+  connectTimeout: 2000,
+  rejectUnauthorized: false,
+};
+
+const client = mqtt.connect(connectOptions);
 
 export const socketController = (socket, io) => {
   const broadcast = (event, data) => socket.broadcast.emit(event, data);

@@ -14,6 +14,7 @@
     "@babel/preset-env": "^7.12.1",
     "babelify": "^10.0.0",
     "body-parser": "^1.19.0",
+    "cbor": "^5.1.0",
     "cookie-parser": "^1.4.5",
     "del": "^6.0.0",
     "dotenv": "^8.2.0",
@@ -24,12 +25,16 @@
     "gulp-csso": "^4.0.1",
     "gulp-sass": "^4.1.0",
     "helmet": "^4.2.0",
+    "ip": "^1.1.5",
+    "js2xmlparser": "^4.0.1",
     "mongoose": "^5.10.11",
     "morgan": "^1.10.0",
     "mqtt": "^4.2.4",
     "node-sass": "^5.0.0",
     "pug": "^3.0.0",
-    "socket.io": "^3.0.0"
+    "shortid": "^2.2.16",
+    "socket.io": "^3.0.0",
+    "xml2js": "^0.4.23"
   },
   "devDependencies": {
     "eslint": "^7.12.1",

@@ -12,12 +12,14 @@
  * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-var conf = {};
-var cse = {};
-var ae = {};
-var cnt_arr = [];
-var sub_arr = [];
-var acp = {};
+// var ip = require("ip");
+
+const conf = {};
+const cse = {};
+const ae = {};
+const cnt_arr = [];
+const sub_arr = [];
+const acp = {};
 
 conf.useprotocol = "mqtt"; // select one for 'http' or 'mqtt' or 'coap' or 'ws'
 
@@ -33,12 +35,12 @@ cse.mqttport = "1883";
 cse.wsport = "7577";
 
 // build ae
-ae.name = "IYAHN_DEMO";
+ae.name = "SERVER_ROOM";
 
 ae.id = "S" + ae.name;
 
 ae.parent = "/" + cse.name;
-ae.appid = "measure_co2";
+ae.appid = "measure_temp";
 ae.port = "9727";
 ae.bodytype = "json"; // select 'json' or 'xml' or 'cbor'
 ae.tasport = "3105";
@@ -47,13 +49,15 @@ ae.tasport = "3105";
 var count = 0;
 cnt_arr[count] = {};
 cnt_arr[count].parent = "/" + cse.name + "/" + ae.name;
-cnt_arr[count++].name = "tvoc";
-cnt_arr[count] = {};
-cnt_arr[count].parent = "/" + cse.name + "/" + ae.name;
-cnt_arr[count++].name = "co2";
-cnt_arr[count] = {};
-cnt_arr[count].parent = "/" + cse.name + "/" + ae.name;
 cnt_arr[count++].name = "temp";
+
+cnt_arr[count] = {};
+cnt_arr[count].parent = "/" + cse.name + "/" + ae.name;
+cnt_arr[count++].name = "hum";
+
+cnt_arr[count] = {};
+cnt_arr[count].parent = "/" + cse.name + "/" + ae.name;
+cnt_arr[count++].name = "fan";
 
 //cnt_arr[count] = {};
 //cnt_arr[count].parent = '/' + cse.name + '/' + ae.name;
@@ -67,26 +71,43 @@ count = 0;
 //sub_arr[count++].nu = 'mqtt://' + cse.host + '/' + ae.id;
 
 // --------
+
+// Subscribe Temp
+sub_arr[count] = {};
+sub_arr[count].parent = "/" + cse.name + "/" + ae.name + "/" + cnt_arr[0].name;
+sub_arr[count].name = "subTemp";
+sub_arr[count++].nu = "mqtt://" + cse.host + "/" + ae.id + "?ct=" + ae.bodytype; // mqtt
+
+// Subscribe Huminity
 sub_arr[count] = {};
 sub_arr[count].parent = "/" + cse.name + "/" + ae.name + "/" + cnt_arr[1].name;
-sub_arr[count].name = "sub";
+sub_arr[count].name = "subHum";
 sub_arr[count++].nu = "mqtt://" + cse.host + "/" + ae.id + "?ct=" + ae.bodytype; // mqtt
+
+// Publish Fan
+sub_arr[count] = {};
+sub_arr[count].parent = "/" + cse.name + "/" + ae.name + "/" + cnt_arr[1].name;
+sub_arr[count].name = "pubFan";
+sub_arr[count++].nu = "mqtt://" + cse.host + "/" + ae.id + "?ct=" + ae.bodytype; // mqtt
+
 //sub_arr[count++].nu = 'http://' + ip.address() + ':' + ae.port + '/noti?ct=json'; // http
 //sub_arr[count++].nu = 'Mobius/'+ae.name; // mqtt
 // --------
 
-sub_arr[count] = {};
-sub_arr[count].parent = "/" + cse.name + "/" + ae.name + "/" + cnt_arr[1].name;
-sub_arr[count].name = "sub1";
-sub_arr[count++].nu = "mqtt://" + cse.host + "/" + ae.id + "1?ct=json"; // mqtt
-sub_arr[count] = {};
-sub_arr[count].parent = "/" + cse.name + "/" + ae.name + "/" + cnt_arr[1].name;
-sub_arr[count].name = "sub2";
-sub_arr[count++].nu = "mqtt://" + cse.host + "/" + ae.id + "2?ct=json"; // mqtt
-sub_arr[count] = {};
-sub_arr[count].parent = "/" + cse.name + "/" + ae.name + "/" + cnt_arr[1].name;
-sub_arr[count].name = "sub3";
-sub_arr[count++].nu = "mqtt://" + cse.host + "/" + ae.id + "3?ct=json"; // mqtt
+// sub_arr[count] = {};
+// sub_arr[count].parent = "/" + cse.name + "/" + ae.name + "/" + cnt_arr[1].name;
+// sub_arr[count].name = "sub1";
+// sub_arr[count++].nu = "mqtt://" + cse.host + "/" + ae.id + "1?ct=json"; // mqtt
+
+// sub_arr[count] = {};
+// sub_arr[count].parent = "/" + cse.name + "/" + ae.name + "/" + cnt_arr[1].name;
+// sub_arr[count].name = "sub2";
+// sub_arr[count++].nu = "mqtt://" + cse.host + "/" + ae.id + "2?ct=json"; // mqtt
+
+// sub_arr[count] = {};
+// sub_arr[count].parent = "/" + cse.name + "/" + ae.name + "/" + cnt_arr[1].name;
+// sub_arr[count].name = "sub3";
+// sub_arr[count++].nu = "mqtt://" + cse.host + "/" + ae.id + "3?ct=json"; // mqtt
 
 /*// --------
 sub_arr[count] = {};

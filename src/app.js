@@ -12,6 +12,7 @@ import socketIO from "socket.io";
 import "./global";
 import "./db";
 import "./models/User";
+import "./oneM2M/mqtt_app";
 
 import globalRouter from "./router/globalRouter";
 import deviceRouter from "./router/deviceRouter";
@@ -26,7 +27,7 @@ const app = express();
 const PORT = process.env.PORT || 4000;
 const tempTopic = "dht11";
 
-const getMessage = async (topic, message) => {
+export const getMessage = async (topic, message) => {
   const obj = JSON.parse(message);
   const date = new Date();
   const year = date.getFullYear();
@@ -70,7 +71,6 @@ const connectOptions = {
   rejectUnauthorized: false,
 };
 
-// const client = mqtt.connect(process.env.MQTT_URL);
 const client = mqtt.connect(connectOptions);
 
 const handleListening = () => {
@@ -99,8 +99,13 @@ app.use(routes.device, deviceRouter);
 
 client.on("connect", () => {
   console.log("✅ mqtt connect");
-  client.subscribe(tempTopic);
+  // client.subscribe(tempTopic);
   console.log(`subscribe ${tempTopic}`);
+  sh_state = "crtae";
+});
+
+client.once("error", (error) => {
+  console.log(error);
 });
 
 client.on("message", getMessage);
