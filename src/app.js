@@ -16,7 +16,6 @@ import "./oneM2M/mqtt_app";
 
 import globalRouter from "./router/globalRouter";
 import deviceRouter from "./router/deviceRouter";
-// import Temp from "./models/Temp";
 import routes from "./routes";
 import csp from "./csp";
 
@@ -25,54 +24,6 @@ import { socketController } from "./sockets/socketController";
 
 const app = express();
 const PORT = process.env.PORT || 4000;
-// const tempTopic = "temp";
-// const humTopic = "hum";
-
-// const getMessage = async (topic, message) => {
-//   const obj = JSON.parse(message);
-//   const date = new Date();
-//   const year = date.getFullYear();
-//   const month = date.getMonth();
-//   const today = date.getDate();
-//   const hours = date.getHours();
-//   const minutes = date.getMinutes();
-//   const seconds = date.getSeconds();
-//   obj.created_at = new Date(
-//     Date.UTC(year, month, today, hours, minutes, seconds)
-//   );
-//   console.log(obj);
-
-//   const temp = new Temp({
-//     tmp: obj.tmp,
-//     hum: obj.hum,
-//     created_at: obj.created_at,
-//   });
-
-//   try {
-//     const saveTemp = await temp.save();
-//     console.log("insert OK");
-//   } catch (err) {
-//     console.log({ message: err });
-//   }
-// };
-
-// const connectOptions = {
-//   host: conf.cse.host,
-//   port: conf.cse.mqttport,
-//   //              username: 'keti',
-//   //              password: 'keti123',
-//   protocol: "mqtt",
-//   keepalive: 10,
-//   //              clientId: serverUID,
-//   protocolId: "MQTT",
-//   protocolVersion: 4,
-//   clean: true,
-//   reconnectPeriod: 2000,
-//   connectTimeout: 2000,
-//   rejectUnauthorized: false,
-// };
-
-// const client = mqtt.connect(connectOptions);
 
 const handleListening = () => {
   console.log(`✅ Listening : http://localhost:${PORT}`);
@@ -97,20 +48,6 @@ app.use(localMiddleware);
 
 app.use(routes.home, globalRouter);
 app.use(routes.device, deviceRouter);
-
-// client.on("connect", () => {
-//   console.log("✅ mqtt connect");
-//   // client.subscribe(tempTopic);
-//   console.log(`subscribe ${tempTopic}`);
-//   console.log(`subscribe ${humTopic}`);
-//   sh_state = "crtae";
-// });
-
-// client.once("error", (error) => {
-//   console.log(error);
-// });
-
-// client.on("message", getMessage);
 
 const server = app.listen(PORT, handleListening);
 const io = socketIO(server);

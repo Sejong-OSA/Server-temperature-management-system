@@ -57,7 +57,11 @@ cnt_arr[count++].name = "hum";
 
 cnt_arr[count] = {};
 cnt_arr[count].parent = "/" + cse.name + "/" + ae.name;
-cnt_arr[count++].name = "fan";
+cnt_arr[count++].name = "fan1";
+
+cnt_arr[count] = {};
+cnt_arr[count].parent = "/" + cse.name + "/" + ae.name;
+cnt_arr[count++].name = "fan2";
 
 //cnt_arr[count] = {};
 //cnt_arr[count].parent = '/' + cse.name + '/' + ae.name;
@@ -84,10 +88,16 @@ sub_arr[count].parent = "/" + cse.name + "/" + ae.name + "/" + cnt_arr[1].name;
 sub_arr[count].name = "subHum";
 sub_arr[count++].nu = "mqtt://" + cse.host + "/" + ae.id + "?ct=" + ae.bodytype; // mqtt
 
-// Publish Fan
+// Subscribe Fan1
 sub_arr[count] = {};
 sub_arr[count].parent = "/" + cse.name + "/" + ae.name + "/" + cnt_arr[2].name;
-sub_arr[count].name = "subFan";
+sub_arr[count].name = "subFan1";
+sub_arr[count++].nu = "mqtt://" + cse.host + "/" + ae.id + "?ct=" + ae.bodytype; // mqtt
+
+// Subscribe Fan2
+sub_arr[count] = {};
+sub_arr[count].parent = "/" + cse.name + "/" + ae.name + "/" + cnt_arr[3].name;
+sub_arr[count].name = "subFan2";
 sub_arr[count++].nu = "mqtt://" + cse.host + "/" + ae.id + "?ct=" + ae.bodytype; // mqtt
 
 //sub_arr[count++].nu = 'http://' + ip.address() + ':' + ae.port + '/noti?ct=json'; // http

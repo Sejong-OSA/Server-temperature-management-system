@@ -19,7 +19,7 @@ export const handleHum = (obj) => {
   const jsonObj = JSON.parse(obj);
   const humValue = jsonObj.data;
 
-  hum.innerHTML = `Temparature: ${humValue}°C`;
+  hum.innerHTML = `Humidity: ${humValue}%`;
 
   if (humValue >= 60 || humValue <= 40) {
     ledStatus.innerHTML = `LED STATUS : LED ON`;
