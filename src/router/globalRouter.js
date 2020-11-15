@@ -9,6 +9,10 @@ globalRouter.get(routes.home, home);
 
 // Join
 globalRouter.get(routes.join, getJoin);
-globalRouter.post(routes.join, uploadAvatar, postJoin);
+globalRouter.post(routes.join, uploadAvatar, postJoin, postLogin);
+
+// Login
+globalRouter.get(routes.login, getLogin);
+globalRouter.post(routes.login, postLogin);
 
 export default globalRouter;
