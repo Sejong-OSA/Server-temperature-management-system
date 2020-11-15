@@ -31,7 +31,7 @@ export const postJoin = async (req, res, next) => {
   } = req;
 
   if (password !== password2) {
-    req.flash("error", "Passwords don't match");
+    // req.flash("error", "Passwords don't match");
     res.status(400);
     res.redirect(routes.join);
   } else {
@@ -39,7 +39,7 @@ export const postJoin = async (req, res, next) => {
       const user = await User({
         name,
         email,
-        avatarUrl: file ? file.location : null,
+        avatarUrl: file ? file.path : null,
       });
       await User.register(user, password);
       next();
