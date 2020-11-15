@@ -14,11 +14,11 @@ const globalRouter = express.Router();
 globalRouter.get(routes.home, home);
 
 // Join
-globalRouter.get(routes.join, getJoin);
-globalRouter.post(routes.join, uploadAvatar, postJoin, postLogin);
+globalRouter.get(routes.join, onlyPublic, getJoin);
+globalRouter.post(routes.join, onlyPublic, uploadAvatar, postJoin, postLogin);
 
 // Login
-globalRouter.get(routes.login, getLogin);
-globalRouter.post(routes.login, postLogin);
+globalRouter.get(routes.login, onlyPublic, getLogin);
+globalRouter.post(routes.login, onlyPublic, postLogin);
 
 export default globalRouter;
