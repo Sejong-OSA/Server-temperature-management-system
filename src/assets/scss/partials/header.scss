@@ -1,0 +1,27 @@
+header {
+  font-family: "Cinzel Decorative", cursive;
+  font-weight: 700;
+  font-size: 30px;
+  position: fixed;
+  width: 100%;
+  .header__wrapper {
+    background-color: #248fbc;
+    padding: 10px 60px;
+    display: flex;
+    justify-content: space-between;
+    .header__column {
+      i {
+        margin-right: 15px;
+      }
+      a {
+        color: white;
+      }
+      ul {
+        display: flex;
+        li:not(:last-child) {
+          margin-right: 15px;
+        }
+      }
+    }
+  }
+}

@@ -1,7 +1,8 @@
+import request from "request";
+
 import events from "./events";
 import Temp from "../models/Temp";
 import Hum from "../models/Hum";
-import request from "request";
 
 const cse = {};
 const ae = {};
