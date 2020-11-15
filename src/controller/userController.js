@@ -56,3 +56,35 @@ export const postEditProfile = async (req, res) => {
     res.redirect(routes.editProfile);
   }
 };
+
+export const getChangePassword = async (req, res) => {
+  try {
+    res.render("changePassword", { pageTitle: "changePassword" });
+  } catch (error) {
+    // req.flash("error", "Can't access the change-password page");
+    console.log(error);
+    res.redirect(routes.home);
+  }
+};
+
+export const postChangePassword = async (req, res) => {
+  const {
+    body: { oldPassword, newPassword, verifyPassword },
+  } = req;
+  if (newPassword !== verifyPassword) {
+    console.log("password doesn't match");
+    res.status(400);
+    res.redirect(`/users${routes.changePassword}`);
+    return;
+  }
+  try {
+    await req.user.changePassword(oldPassword, newPassword);
+    // req.flash("success", "Change password success");
+    res.redirect(routes.me);
+  } catch (error) {
+    // req.flash("error", "Change password fail");
+    console.log("old password is incorrect");
+    console.log(error);
+    res.redirect(`/users${routes.changePassword}`);
+  }
+};
