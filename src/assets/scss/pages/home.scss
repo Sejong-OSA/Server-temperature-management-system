@@ -1,0 +1,28 @@
+.home {
+  padding-top: 100px;
+  .contorler {
+    margin-bottom: 100px;
+    .fan {
+      display: flex;
+      align-items: center;
+      button {
+        margin-right: 50px;
+      }
+      #jsFanStatus {
+        font-size: 50px;
+        opacity: 0.7;
+        width: 450px;
+      }
+    }
+  }
+  .msg {
+    ul {
+      font-size: 50px;
+      opacity: 0.7;
+      width: 450px;
+      li {
+        margin-bottom: 30px;
+      }
+    }
+  }
+}

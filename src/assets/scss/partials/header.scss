@@ -4,11 +4,12 @@ header {
   font-size: 30px;
   position: fixed;
   width: 100%;
+  background-color: $skyBlue;
   .header__wrapper {
-    background-color: #248fbc;
-    padding: 10px 60px;
+    padding: 15px 120px;
     display: flex;
     justify-content: space-between;
+    align-items: center;
     .header__column {
       i {
         margin-right: 15px;
