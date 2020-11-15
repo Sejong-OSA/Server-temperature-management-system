@@ -1,6 +1,12 @@
 import express from "express";
 import routes from "../routes";
-import { getJoin, home, postJoin } from "../controller/globalController";
+import {
+  getJoin,
+  getLogin,
+  home,
+  postJoin,
+  postLogin,
+} from "../controller/globalController";
 import { uploadAvatar } from "../middlewares";
 
 const globalRouter = express.Router();

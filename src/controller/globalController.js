@@ -1,3 +1,5 @@
+import passport from "passport";
+
 import events from "../sockets/events";
 import routes from "../routes";
 import User from "../models/User";
@@ -50,3 +52,17 @@ export const postJoin = async (req, res, next) => {
     }
   }
 };
+
+export const getLogin = (req, res) => {
+  try {
+    res.render("login", { pageTitle: "Login" });
+  } catch (error) {
+    console.log(error);
+    res.redirect(routes.home);
+  }
+};
+
+export const postLogin = passport.authenticate("local", {
+  successRedirect: routes.home,
+  failureRedirect: routes.login,
+});

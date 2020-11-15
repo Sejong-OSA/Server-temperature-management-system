@@ -6,9 +6,13 @@ import morgan from "morgan";
 import helmet from "helmet";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
-import mqtt from "mqtt";
 import socketIO from "socket.io";
+import session from "express-session";
+import MongoStore from "connect-mongo";
+import mongoose from "mongoose";
+import passport from "passport";
 
+import "./passport";
 import "./global";
 import "./db";
 import "./models/User";
@@ -24,6 +28,7 @@ import { socketController } from "./sockets/socketController";
 
 const app = express();
 const PORT = process.env.PORT || 4000;
+const CookieStore = MongoStore(session);
 
 const handleListening = () => {
   console.log(`✅ Listening : http://localhost:${PORT}`);
@@ -42,6 +47,18 @@ app.use(morgan("dev"));
 
 app.set("views", path.join(__dirname, "views"));
 app.use(express.static(path.join(__dirname, "static")));
+
+app.use(
+  session({
+    secret: process.env.COOKIE_SECRET,
+    resave: false,
+    saveUninitialized: true,
+    store: new CookieStore({ mongooseConnection: mongoose.connection }),
+  })
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use(csp);
 app.use(localMiddleware);
