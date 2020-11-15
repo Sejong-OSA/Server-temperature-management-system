@@ -30,7 +30,7 @@ main {
 button {
   background-color: $skyBlue;
   color: white;
-  padding: 7px 10px;
+  
   font-weight: 600;
   font-size: 16px;
   border-radius: 8px;
@@ -38,7 +38,7 @@ button {
   cursor: pointer;
   box-shadow: $buttonShadow;
   width: 100%;
-  max-width: 300px;
-  height: 100px;
+  max-width: 320px;
+  
   padding: 10px 5px;
 }

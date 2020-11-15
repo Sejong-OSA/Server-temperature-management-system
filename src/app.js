@@ -25,6 +25,7 @@ import csp from "./csp";
 
 import { localMiddleware } from "./middlewares";
 import { socketController } from "./sockets/socketController";
+import userRouter from "./router/userRouter";
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -65,6 +66,7 @@ app.use(localMiddleware);
 app.use("/uploads", express.static("uploads"));
 
 app.use(routes.home, globalRouter);
+app.use(routes.users, userRouter);
 app.use(routes.device, deviceRouter);
 
 const server = app.listen(PORT, handleListening);

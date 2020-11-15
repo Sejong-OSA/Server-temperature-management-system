@@ -11,7 +11,7 @@ export const localMiddleware = async (req, res, next) => {
   let userExisted = false;
   try {
     const user = await User.find({});
-    console.log(user);
+
     if (user.length > 0) {
       userExisted = true;
     }

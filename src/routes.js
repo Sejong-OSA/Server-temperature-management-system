@@ -45,12 +45,6 @@ const routes = {
   users: USERS,
   editProfile: EDIT_PROFILE,
   changePassword: CHANGE_PASSWORD,
-  userDetail: (id) => {
-    if (id) {
-      return `/users/${id}`;
-    }
-    return USER_DETAIL;
-  },
 };
 
 export default routes;
