@@ -7,11 +7,13 @@ import {
   postJoin,
   postLogin,
 } from "../controller/globalController";
-import { uploadAvatar } from "../middlewares";
+import { onlyPrivate, onlyPublic, uploadAvatar } from "../middlewares";
+import { getMe } from "../controller/userController";
 
 const globalRouter = express.Router();
 
 globalRouter.get(routes.home, home);
+globalRouter.get(routes.me, onlyPrivate, getMe);
 
 // Join
 globalRouter.get(routes.join, onlyPublic, getJoin);

@@ -1,0 +1,17 @@
+extends layouts/main
+
+block content
+  .profile
+    .profile__column
+      img(src=user.avatarUrl).profile__avatar
+    .profile__column
+      .profile__name #{user.name}
+      .profile__email #{user.email}
+      .profile__status #{user.status}
+    .profile__column
+      .profile__btns
+        if loggedUser && loggedUser.id === user.id
+          a(href=`/users${routes.editProfile}`).profile__edit
+            button ✏️ Edit Profile
+          a(href=`/users${routes.changePassword}`).changePassword
+            button 🔒 Change Password

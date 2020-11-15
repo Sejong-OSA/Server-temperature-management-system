@@ -62,6 +62,7 @@ app.use(passport.session());
 
 app.use(csp);
 app.use(localMiddleware);
+app.use("/uploads", express.static("uploads"));
 
 app.use(routes.home, globalRouter);
 app.use(routes.device, deviceRouter);
