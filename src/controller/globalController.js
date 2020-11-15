@@ -3,9 +3,17 @@ import passport from "passport";
 import events from "../sockets/events";
 import routes from "../routes";
 import User from "../models/User";
+import { TRUE } from "node-sass";
 
 export const home = async (req, res) => {
   try {
+    let userExisted = false;
+    const user = await User.find({});
+
+    if (user) {
+      userExisted = true;
+    }
+
     res.render("home", {
       pageTitle: "home",
       events: JSON.stringify(events),
