@@ -28,7 +28,6 @@ main {
 }
 
 button {
-  margin-right: 50px;
   background-color: $skyBlue;
   color: white;
   padding: 7px 10px;
@@ -42,7 +41,4 @@ button {
   max-width: 300px;
   height: 100px;
   padding: 10px 5px;
-  &:active {
-    box-shadow: inset -10px 4px 5px $skyBlue;
-  }
 }

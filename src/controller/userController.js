@@ -14,3 +14,9 @@ export const getMe = async (req, res) => {
     res.redirect(routes.home);
   }
 };
+
+export const logout = (req, res) => {
+  // req.flash("info", "Log out!!");
+  req.logout();
+  res.redirect(routes.home);
+};

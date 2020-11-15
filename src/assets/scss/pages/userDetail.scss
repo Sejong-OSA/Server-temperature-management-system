@@ -31,6 +31,12 @@
         a {
           width: 100%;
           max-width: 320px;
+          button {
+            padding: 15px 35px;
+            &:active {
+              box-shadow: inset -10px 4px 5px $skyBlue;
+            }
+          }
         }
       }
     }

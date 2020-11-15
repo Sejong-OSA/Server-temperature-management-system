@@ -8,7 +8,7 @@ import {
   postLogin,
 } from "../controller/globalController";
 import { onlyPrivate, onlyPublic, uploadAvatar } from "../middlewares";
-import { getMe } from "../controller/userController";
+import { getMe, logout } from "../controller/userController";
 
 const globalRouter = express.Router();
 
@@ -22,5 +22,7 @@ globalRouter.post(routes.join, onlyPublic, uploadAvatar, postJoin, postLogin);
 // Login
 globalRouter.get(routes.login, onlyPublic, getLogin);
 globalRouter.post(routes.login, onlyPublic, postLogin);
+
+globalRouter.get(routes.logout, onlyPrivate, logout);
 
 export default globalRouter;

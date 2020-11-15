@@ -11,6 +11,12 @@
     .fan {
       display: flex;
       align-items: center;
+      button {
+        margin-right: 50px;
+        &:active {
+          box-shadow: inset -10px 4px 5px $skyBlue;
+        }
+      }
     }
     #jsFanStatus {
       font-size: 50px;
