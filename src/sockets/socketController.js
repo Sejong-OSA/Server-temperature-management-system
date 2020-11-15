@@ -1,30 +1,9 @@
+import request from "request";
+
 import events from "./events";
 import Temp from "../models/Temp";
 import Hum from "../models/Hum";
-import request from "request";
-// import mqtt from "mqtt";
 
-// const connectOptions = {
-//   host: conf.cse.host,
-//   port: conf.cse.mqttport,
-//   //              username: 'keti',
-//   //              password: 'keti123',
-//   protocol: "mqtt",
-//   keepalive: 10,
-//   //              clientId: serverUID,
-//   protocolId: "MQTT",
-//   protocolVersion: 4,
-//   clean: true,
-//   reconnectPeriod: 2000,
-//   connectTimeout: 2000,
-//   rejectUnauthorized: false,
-// };
-
-// import hashmap from "hashmap";
-
-// const map = new hashmap();
-
-// const client = mqtt.connect(connectOptions);
 const cse = {};
 const ae = {};
 
@@ -41,30 +20,13 @@ export const createContentInstance = ({ data, actuator }) => {
   const cseURL = `http://${cse.host}:${cse.port}`;
   const con = data;
   const cseRelease = "1";
-  // const object = {
-  //   type: "led",
-  //   data: con,
-  // };
 
-  let devices = [];
   let requestNr = 0;
 
-  // map.forEach((value, key) => {
-  //   devices.push({
-  //     name: key,
-  //     type: value.type,
-  //     data: value.data,
-  //   });
-  // });
-
-  // if (map.has(actuator)) {
-  console.log("map.has");
   console.log("\n[REQUEST]");
 
-  // map.set(actuator, object);
-
   const options = {
-    uri: `${cseURL}/${cse.name}/${ae.name}/fan`,
+    uri: `${cseURL}/${cse.name}/${ae.name}/${actuator}`,
     method: "POST",
     headers: {
       "X-M2M-Origin": "S" + actuator,
@@ -87,7 +49,7 @@ export const createContentInstance = ({ data, actuator }) => {
       "X-M2M-RVI": cseRelease,
     });
   }
-
+  console.log(options);
   requestNr += 1;
   request(options, (error, response, body) => {
     console.log("[RESPONSE]");
@@ -111,14 +73,6 @@ export const socketController = (socket, io) => {
       .sort({ _id: -1 })
       .limit(1)
       .then((data) => {
-        const temp = Number(data[0].data);
-        if (temp >= 26 || temp <= 18) {
-          const obj = {
-            data: "1",
-            actuator: "led",
-          };
-          // createContentInstance(obj);
-        }
         socket.emit(events.resTemp, JSON.stringify(data[0]));
       });
   });
@@ -128,22 +82,10 @@ export const socketController = (socket, io) => {
       .sort({ _id: -1 })
       .limit(1)
       .then((data) => {
-        const hum = Number(data[0].data);
-        if (hum >= 60 || hum <= 40) {
-          const obj = {
-            data: "1",
-            actuator: "led",
-          };
-          // createContentInstance(obj);
-        }
         socket.emit(events.resHum, JSON.stringify(data[0]));
       });
   });
 
   //웹에서 소켓을 이용한 LED ON/OFF 제어하기
-  // socket.on(events.commandLed, (data) => {
-  //   const obj = JSON.parse(data);
-  //   client.publish("led", obj.led);
-  // });
   socket.on(events.commandLed, createContentInstance);
 };

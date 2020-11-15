@@ -17,6 +17,9 @@
 // var url = require("url");
 import Temp from "../models/Temp";
 import Hum from "../models/Hum";
+import Fan1 from "../models/Fan1";
+import Fan2 from "../models/Fan2";
+import { createContentInstance } from "../sockets/socketController";
 
 var fs = require("fs");
 var mqtt = require("mqtt");
@@ -32,7 +35,55 @@ var noti_topic = "/oneM2M/req/+/" + conf.ae.id + "/#";
 
 global.sh_adn = require("./mqtt_adn");
 var noti = require("./noti");
-// var tas = require("./thyme_tas");
+
+const controlFan = async () => {
+  let data = await Temp.find({}).sort({ _id: -1 }).limit(1);
+  const temp = Number(data[0].data);
+  console.log(`temp:${temp}`);
+
+  data = await Hum.find({}).sort({ _id: -1 }).limit(1);
+  const hum = Number(data[0].data);
+  console.log(`hum:${hum}`);
+
+  data = await Fan1.find({}).sort({ _id: -1 }).limit(1);
+  const fan1 = Number(data[0].data);
+  console.log(`fan1:${fan1}`);
+
+  data = await Fan2.find({}).sort({ _id: -1 }).limit(1);
+  const fan2 = Number(data[0].data);
+  console.log(`fan2:${fan2}`);
+
+  if (!fan1 && !fan2) {
+    console.log("fan1 and fan2 are false");
+    if (temp >= 28 || temp <= 16 || hum >= 63 || hum <= 38) {
+      createContentInstance({ data: "1", actuator: "fan1" });
+      createContentInstance({ data: "1", actuator: "fan2" });
+    } else if (temp >= 26 || temp <= 18 || hum >= 60 || hum <= 40) {
+      createContentInstance({ data: "1", actuator: "fan1" });
+    } else {
+      return;
+    }
+  } else if (fan1 && !fan2) {
+    console.log("fan1 or fan2 are false");
+    if (temp >= 28 || temp <= 16 || hum >= 63 || hum <= 38) {
+      createContentInstance({ data: "1", actuator: "fan2" });
+    } else if (temp >= 26 || temp <= 18 || hum >= 60 || hum <= 40) {
+      return;
+    } else {
+      createContentInstance({ data: "0", actuator: "fan1" });
+    }
+  } else {
+    console.log("fan1 and fan2 are true");
+    if (temp >= 28 || temp <= 16 || hum >= 63 || hum <= 38) {
+      return;
+    } else if (temp >= 26 || temp <= 18 || hum >= 60 || hum <= 40) {
+      createContentInstance({ data: "0", actuator: "fan2" });
+    } else {
+      createContentInstance({ data: "0", actuator: "fan1" });
+      createContentInstance({ data: "0", actuator: "fan2" });
+    }
+  }
+};
 
 const mqtt_message_handler = async (topic, message) => {
   var topic_arr = topic.split("/");
@@ -101,6 +152,8 @@ const mqtt_message_handler = async (topic, message) => {
             created_at: obj.created_at,
           });
           const saveTemp = await temp.save();
+          console.log("insert OK");
+          controlFan();
         } else if (obj.dataType === "hum") {
           const hum = new Hum({
             dataType: obj.dataType,
@@ -108,9 +161,25 @@ const mqtt_message_handler = async (topic, message) => {
             created_at: obj.created_at,
           });
           const saveHum = await hum.save();
+          console.log("insert OK");
+          controlFan();
+        } else if (obj.dataType === "fan1") {
+          const fan1 = new Fan1({
+            dataType: obj.dataType,
+            data: obj.data,
+            created_at: obj.created_at,
+          });
+          const saveFan1 = await fan1.save();
+          console.log("insert OK");
+        } else if (obj.dataType === "fan2") {
+          const fan2 = new Fan2({
+            dataType: obj.dataType,
+            data: obj.data,
+            created_at: obj.created_at,
+          });
+          const saveFan2 = await fan2.save();
+          console.log("insert OK");
         }
-
-        console.log("insert OK");
       } catch (err) {
         console.log({ message: err });
       }
