@@ -6,13 +6,13 @@ header
         span Server Monitoring System
     .header__column
       ul.header__btns
-        //- if !loggedUser
-        //-   li.header__btn
-        //-     a(href=routes.join) Join
-        //-   li.header__btn
-        //-     a(href=routes.login) Login
-        //- else          
-        //-   li.header__btn
-        //-     a(href=routes.me) Profile
-        //-   li.header__btn
-        //-     a(href=routes.logout) Logout
+        if !loggedUser
+          li.header__btn
+            a(href=routes.join) Join
+          li.header__btn
+            a(href=routes.login) Login
+        else          
+          li.header__btn
+            a(href=routes.me) Profile
+          li.header__btn
+            a(href=routes.logout) Logout
