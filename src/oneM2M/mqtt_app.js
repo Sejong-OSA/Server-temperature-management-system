@@ -138,9 +138,8 @@ const mqtt_message_handler = async (topic, message) => {
 
       obj.dataType = dataType[2];
       obj.data = sensorData;
-      obj.created_at = new Date(
-        Date.UTC(year, month, today, hours, minutes, seconds)
-      );
+      obj.created_at = new Date();
+      // Date.UTC(year, month, today, hours, minutes, seconds)
 
       console.log(obj);
 
