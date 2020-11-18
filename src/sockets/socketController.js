@@ -9,7 +9,7 @@ const ae = {};
 
 // build cse
 // cse.host = "203.250.148.89"; //'59.10.2.16';
-cse.host = "127.0.0.1";
+cse.host = "192.168.1.87";
 cse.port = "7579";
 cse.name = "Mobius";
 
