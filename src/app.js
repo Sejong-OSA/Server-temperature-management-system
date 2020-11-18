@@ -11,6 +11,7 @@ import session from "express-session";
 import MongoStore from "connect-mongo";
 import mongoose from "mongoose";
 import passport from "passport";
+import flash from "express-flash";
 
 import "./passport";
 import "./global";
@@ -61,6 +62,7 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use(flash());
 app.use(csp);
 app.use(localMiddleware);
 app.use("/uploads", express.static("uploads"));

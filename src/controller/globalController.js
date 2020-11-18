@@ -20,7 +20,7 @@ export const getJoin = (req, res) => {
   try {
     res.render("join", { pageTitle: "Join" });
   } catch (error) {
-    // req.flash("error", "Can't access the join");
+    req.flash("error", "Can't access the join");
     console.log(error);
     res.redirect(routes.home);
   }
@@ -33,7 +33,7 @@ export const postJoin = async (req, res, next) => {
   } = req;
 
   if (password !== password2) {
-    // req.flash("error", "Passwords don't match");
+    req.flash("error", "Passwords don't match");
     res.status(400);
     res.redirect(routes.join);
   } else {
@@ -48,7 +48,7 @@ export const postJoin = async (req, res, next) => {
     } catch (error) {
       console.log(error);
       res.redirect(routes.join);
-      // req.flash("error", "Join fail");
+      req.flash("error", "Join fail");
     }
   }
 };
@@ -65,4 +65,6 @@ export const getLogin = (req, res) => {
 export const postLogin = passport.authenticate("local", {
   successRedirect: routes.home,
   failureRedirect: routes.login,
+  failureFlash: "Login fail",
+  successFlash: "Welcome!",
 });
