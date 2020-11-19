@@ -18,6 +18,7 @@ import "./global";
 import "./db";
 import "./models/User";
 import "./oneM2M/mqtt_app";
+import "./oneM2M/AI_CENTER/AI_mqtt_app";
 
 import globalRouter from "./router/globalRouter";
 import deviceRouter from "./router/deviceRouter";

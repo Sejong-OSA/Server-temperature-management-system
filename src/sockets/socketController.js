@@ -56,7 +56,6 @@ export const createContentInstance = ({ data, actuator, title }) => {
       console.log(body);
     }
   });
-  // }
 };
 
 export const socketController = (socket, io) => {
@@ -80,5 +79,5 @@ export const socketController = (socket, io) => {
   });
 
   //웹에서 소켓을 이용한 LED ON/OFF 제어하기
-  socket.on(events.commandLed, createContentInstance);
+  socket.on(events.commandFan, createContentInstance);
 };

@@ -16,9 +16,10 @@ const handleLedStatus = () => {
 };
 
 export const handleTemp = ({ data }) => {
+  tempValue = data;
   temp.innerHTML = `Temperature: ${data}°C`;
 
-  if (data >= 26 || data <= 18) {
+  if (tempValue >= 26 || tempValue <= 18) {
     temp.classList.add("warn");
   } else {
     temp.classList.remove("warn");
@@ -27,9 +28,10 @@ export const handleTemp = ({ data }) => {
 };
 
 export const handleHum = ({ data }) => {
+  humValue = data;
   hum.innerHTML = `Humidity: ${data}%`;
 
-  if (data >= 60 || data <= 40) {
+  if (humValue >= 60 || humValue <= 40) {
     hum.classList.add("warn");
   } else {
     hum.classList.remove("warn");
