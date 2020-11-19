@@ -1,13 +1,16 @@
 extends layouts/main
 
 block content
-  .home
-    .contorler
+  .deviceDetail
+    h1.device__title
+      span Title : 
+      span#jsDeviceTitle #{device.title}
+    .device__contorler
       .fan
         button#jsLedOn(name="1") Fan On
         button#jsLedOff(name="0") Fan Off
       #jsFanStatus Fan Status : Fan Off
-    .msg
+    .device__msg
       ul
         li.temp Temperature: #{device.temp[device.temp.length - 1].data}°C
         li.hum Humidity: #{device.hum[device.hum.length - 1].data}%

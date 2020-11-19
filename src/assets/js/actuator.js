@@ -3,6 +3,7 @@ import { getSocket } from "./sockets";
 const ledOn = document.getElementById("jsLedOn");
 const ledOff = document.getElementById("jsLedOff");
 const ledStatus = document.getElementById("jsFanStatus");
+const deviceDetail = document.querySelector(".deviceDetail");
 
 const handleLedOnOff = (event) => {
   const {
@@ -16,5 +17,7 @@ const handleLedOnOff = (event) => {
   ledStatus.innerHTML = `Fan Status : Fan ${name === "1" ? "On" : "Off"}`;
 };
 
-ledOn.addEventListener("click", handleLedOnOff);
-ledOff.addEventListener("click", handleLedOnOff);
+if (deviceDetail) {
+  ledOn.addEventListener("click", handleLedOnOff);
+  ledOff.addEventListener("click", handleLedOnOff);
+}

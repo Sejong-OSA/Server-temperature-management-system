@@ -4,49 +4,6 @@
   grid-template-columns: 1.5fr 1fr;
   grid-template-rows: repeat(2, 1fr);
   padding-top: 100px;
-  .contorler {
-    grid-column: 1/-1;
-    display: grid;
-    grid-template-columns: 1.5fr 1fr;
-    .fan {
-      display: flex;
-      align-items: center;
-      button {
-        margin-right: 50px;
-        height: 100px;
-        &:active {
-          box-shadow: inset -10px 4px 5px $skyBlue;
-        }
-      }
-    }
-    #jsFanStatus {
-      justify-self: flex-end;
-      font-size: 50px;
-      opacity: 0.7;
-      width: 450px;
-      display: flex;
-      align-items: center;
-    }
-  }
-  .msg {
-    ul {
-      font-size: 50px;
-      opacity: 0.7;
-      width: 450px;
-      li {
-        margin-bottom: 30px;
-      }
-    }
-  }
-  #clock-container {
-    justify-self: flex-end;
-    #jsClock {
-      font-size: 50px;
-      opacity: 0.7;
-      width: 450px;
-      display: flex;
-      align-items: center;
-      line-height: 1.5;
-    }
+  .home-devices {
   }
 }

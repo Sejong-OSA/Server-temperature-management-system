@@ -1,4 +1,5 @@
 const clock = document.getElementById("jsClock");
+const deviceDetail = document.querySelector(".deviceDetail");
 
 const handleTime = () => {
   const created_at = new Date();
@@ -12,8 +13,4 @@ const handleTime = () => {
   clock.innerHTML = `${year} ${month} ${today}(${week}) ${time}`;
 };
 
-function init() {
-  setInterval(handleTime, 1000);
-}
-
-init();
+if (deviceDetail) setInterval(handleTime, 1000);

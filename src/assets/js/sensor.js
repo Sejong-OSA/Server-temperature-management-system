@@ -15,13 +15,10 @@ const handleLedStatus = () => {
   }
 };
 
-export const handleTemp = (obj) => {
-  const jsonObj = JSON.parse(obj);
-  tempValue = jsonObj.data;
+export const handleTemp = ({ data }) => {
+  temp.innerHTML = `Temperature: ${data}°C`;
 
-  temp.innerHTML = `Temperature: ${tempValue}°C`;
-
-  if (tempValue >= 26 || tempValue <= 18) {
+  if (data >= 26 || data <= 18) {
     temp.classList.add("warn");
   } else {
     temp.classList.remove("warn");
@@ -29,13 +26,10 @@ export const handleTemp = (obj) => {
   handleLedStatus();
 };
 
-export const handleHum = (obj) => {
-  const jsonObj = JSON.parse(obj);
-  humValue = jsonObj.data;
+export const handleHum = ({ data }) => {
+  hum.innerHTML = `Humidity: ${data}%`;
 
-  hum.innerHTML = `Humidity: ${humValue}%`;
-
-  if (humValue >= 60 || humValue <= 40) {
+  if (data >= 60 || data <= 40) {
     hum.classList.add("warn");
   } else {
     hum.classList.remove("warn");

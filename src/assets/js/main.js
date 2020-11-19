@@ -1,5 +1,5 @@
 import "./sockets";
-import "./home";
+import "./deviceDetail";
 import "./sensor";
 import "./actuator";
 import "./clock";
