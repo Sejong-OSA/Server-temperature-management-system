@@ -3,11 +3,10 @@ include mixins/deviceBlock
 
 block content
   if loggedUser
-    .home
-      .home-devices
-        each device in devices
-          +deviceBlock({
-            id:device.id,
-            title:device.title,
-            createdAt: device.createdAt,
-          })
+    .home-devices
+      each device in devices
+        +deviceBlock({
+          id:device.id,
+          title:device.title,
+          createdAt: device.createdAt,
+        })

@@ -1,9 +1,6 @@
 mixin deviceBlock(device={})
   .deviceBlock
     a(href=routes.deviceDetail(device.id))
-      .deviceBlock__thumnail
-      .deviceBlock__detail
-        .deviceBlock__info
-          h4.deviceBlock__title #{device.title}
-          .deviceBlock__subInfo
-            h5.deviceBlock__createdAt #{device.createdAt}
+      .deviceBlock__info
+        h4.deviceBlock__title #{device.title}
+        h5.deviceBlock__createdAt #{device.createdAt}

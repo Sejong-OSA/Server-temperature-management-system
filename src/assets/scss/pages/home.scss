@@ -1,9 +1,16 @@
-.home {
+.home-devices {
   height: 70vh;
-  display: grid;
-  grid-template-columns: 1.5fr 1fr;
-  grid-template-rows: repeat(2, 1fr);
   padding-top: 100px;
-  .home-devices {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(150px, 1fr));
+  grid-gap: 30px;
+  .deviceBlock:first-child,
+  .deviceBlock:nth-child(2) {
+    grid-column: span 3;
+  }
+  .deviceBlock:nth-child(3),
+  .deviceBlock:nth-child(4),
+  .deviceBlock:nth-child(5) {
+    grid-column: span 2;
   }
 }
