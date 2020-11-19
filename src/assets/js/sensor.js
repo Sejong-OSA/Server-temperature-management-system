@@ -2,28 +2,38 @@ const temp = document.querySelector(".temp");
 const hum = document.querySelector(".hum");
 const ledStatus = document.getElementById("jsFanStatus");
 
-export const handleTemp = (obj) => {
-  const jsonObj = JSON.parse(obj);
-  const tempValue = jsonObj.data;
+let tempValue = 0;
+let humValue = 0;
 
-  temp.innerHTML = `Temperature: ${tempValue}°C`;
-
+const handleLedStatus = () => {
   if (tempValue >= 26 || tempValue <= 18) {
+    ledStatus.innerHTML = `Fan Status : Fan On`;
+  } else if (humValue >= 60 || humValue <= 40) {
     ledStatus.innerHTML = `Fan Status : Fan On`;
   } else {
     ledStatus.innerHTML = `Fan Status : Fan Off`;
   }
 };
 
-export const handleHum = (obj) => {
-  const jsonObj = JSON.parse(obj);
-  const humValue = jsonObj.data;
+export const handleTemp = ({ data }) => {
+  tempValue = data;
+  temp.innerHTML = `Temperature: ${data}°C`;
 
-  hum.innerHTML = `Humidity: ${humValue}%`;
+  if (tempValue >= 26 || tempValue <= 18) {
+    temp.classList.add("warn");
+  } else {
+    temp.classList.remove("warn");
+  }
+  handleLedStatus();
+};
+
+export const handleHum = ({ data }) => {
+  humValue = data;
+  hum.innerHTML = `Humidity: ${data}%`;
 
   if (humValue >= 60 || humValue <= 40) {
-    ledStatus.innerHTML = `Fan Status : Fan On`;
+    hum.classList.add("warn");
   } else {
-    ledStatus.innerHTML = `Fan Status : Fan Off`;
+    hum.classList.remove("warn");
   }
 };

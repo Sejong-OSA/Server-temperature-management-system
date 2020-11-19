@@ -1,0 +1,24 @@
+extends layouts/main
+
+block content
+  .deviceDetail
+    h1.device__title
+      span Title : 
+      span#jsDeviceTitle #{device.title}
+    .device__contorler
+      .fan
+        button#jsFanOn(name="1") Fan On
+        button#jsFanOff(name="0") Fan Off
+      #jsFanStatus Fan Status : Fan Off
+    .device__msg
+      ul
+        if device.temp[device.temp.length - 1] === undefined
+          li.temp Temperature: 0°C
+        else
+          li.temp Temperature: #{device.temp[device.temp.length - 1].data}°C
+        if device.hum[device.hum.length - 1] === undefined
+          li.temp Humidity: 0%
+        else
+          li.hum Humidity: #{device.hum[device.hum.length - 1].data}%
+    #clock-container
+      h4#jsClock 00:00

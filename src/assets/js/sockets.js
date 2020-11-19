@@ -1,5 +1,4 @@
 import { handleTemp, handleHum } from "./sensor";
-import { BELedOnOff } from "./actuator";
 
 let socket = null;
 
@@ -10,5 +9,4 @@ export const initSocket = (aSocket) => {
   socket = aSocket;
   socket.on(events.resTemp, handleTemp);
   socket.on(events.resHum, handleHum);
-  socket.on(events.setLed, BELedOnOff);
 };

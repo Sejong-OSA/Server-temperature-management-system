@@ -11,12 +11,14 @@ import session from "express-session";
 import MongoStore from "connect-mongo";
 import mongoose from "mongoose";
 import passport from "passport";
+import flash from "express-flash";
 
 import "./passport";
 import "./global";
 import "./db";
 import "./models/User";
 import "./oneM2M/mqtt_app";
+import "./oneM2M/AI_CENTER/AI_mqtt_app";
 
 import globalRouter from "./router/globalRouter";
 import deviceRouter from "./router/deviceRouter";
@@ -61,13 +63,14 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use(flash());
 app.use(csp);
 app.use(localMiddleware);
 app.use("/uploads", express.static("uploads"));
 
 app.use(routes.home, globalRouter);
 app.use(routes.users, userRouter);
-app.use(routes.device, deviceRouter);
+app.use(routes.devices, deviceRouter);
 
 const server = app.listen(PORT, handleListening);
 const io = socketIO(server);

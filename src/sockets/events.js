@@ -3,8 +3,7 @@ const events = {
   reqHum: "reqHum",
   resTemp: "resTemp",
   resHum: "resHum",
-  commandLed: "commandLed",
-  setLed: "setLed",
+  commandFan: "commandFan",
 };
 
 export default events;

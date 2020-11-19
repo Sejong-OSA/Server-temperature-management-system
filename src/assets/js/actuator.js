@@ -1,20 +1,32 @@
 import { getSocket } from "./sockets";
 
-const ledOn = document.getElementById("jsLedOn");
-const ledOff = document.getElementById("jsLedOff");
-const ledStatus = document.getElementById("jsFanStatus");
+const fanOn = document.getElementById("jsFanOn");
+const fanOff = document.getElementById("jsFanOff");
+const fanStatus = document.getElementById("jsFanStatus");
+const deviceDetail = document.querySelector(".deviceDetail");
+const deviceTitle = document.getElementById("jsDeviceTitle");
 
-const handleLedOnOff = (event) => {
+const handleFanOnOff = (event) => {
   const {
     target: { name },
   } = event;
   const data = name;
 
-  // {"led":1}, {"led":2}
-  getSocket().emit(window.events.commandLed, { data, actuator: "fan1" });
-  getSocket().emit(window.events.commandLed, { data, actuator: "fan2" });
-  ledStatus.innerHTML = `Fan Status : Fan ${name === "1" ? "On" : "Off"}`;
+  // {"fan":0}, {"fan":1}
+  getSocket().emit(window.events.commandFan, {
+    data,
+    actuator: "fan1",
+    title: deviceTitle.innerHTML,
+  });
+  getSocket().emit(window.events.commandFan, {
+    data,
+    actuator: "fan2",
+    title: deviceTitle.innerHTML,
+  });
+  fanStatus.innerHTML = `Fan Status : Fan ${name === "1" ? "On" : "Off"}`;
 };
 
-ledOn.addEventListener("click", handleLedOnOff);
-ledOff.addEventListener("click", handleLedOnOff);
+if (deviceDetail) {
+  fanOn.addEventListener("click", handleFanOnOff);
+  fanOff.addEventListener("click", handleFanOnOff);
+}

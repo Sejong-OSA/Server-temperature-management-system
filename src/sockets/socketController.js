@@ -1,22 +1,18 @@
 import request from "request";
 
 import events from "./events";
-import Temp from "../models/Temp";
-import Hum from "../models/Hum";
+import Device from "../models/Device";
 
 const cse = {};
-const ae = {};
 
 // build cse
-// cse.host = "203.250.148.89"; //'59.10.2.16';
 cse.host = "127.0.0.1";
 cse.port = "7579";
 cse.name = "Mobius";
 
 // build ae
-ae.name = "SERVER_ROOM";
 
-export const createContentInstance = ({ data, actuator }) => {
+export const createContentInstance = ({ data, actuator, title }) => {
   const cseURL = `http://${cse.host}:${cse.port}`;
   const con = data;
   const cseRelease = "1";
@@ -26,7 +22,7 @@ export const createContentInstance = ({ data, actuator }) => {
   console.log("\n[REQUEST]");
 
   const options = {
-    uri: `${cseURL}/${cse.name}/${ae.name}/${actuator}`,
+    uri: `${cseURL}/${cse.name}/${title}/${actuator}`,
     method: "POST",
     headers: {
       "X-M2M-Origin": "S" + actuator,
@@ -60,32 +56,28 @@ export const createContentInstance = ({ data, actuator }) => {
       console.log(body);
     }
   });
-  // }
 };
 
 export const socketController = (socket, io) => {
-  const broadcast = (event, data) => socket.broadcast.emit(event, data);
-  const superBroadcast = (event, data) => io.emit(event, data);
-
   //웹에서 소켓을 이용한 DHT11 센서데이터 모니터링
-  socket.on(events.reqTemp, () => {
-    Temp.find({})
-      .sort({ _id: -1 })
-      .limit(1)
-      .then((data) => {
-        socket.emit(events.resTemp, JSON.stringify(data[0]));
+  socket.on(events.reqTemp, ({ title }) => {
+    Device.findOne({ title })
+      .populate("temp")
+      .then((device) => {
+        const data = device.temp[device.temp.length - 1].data;
+        socket.emit(events.resTemp, { data });
       });
   });
 
-  socket.on(events.reqHum, () => {
-    Hum.find({})
-      .sort({ _id: -1 })
-      .limit(1)
-      .then((data) => {
-        socket.emit(events.resHum, JSON.stringify(data[0]));
+  socket.on(events.reqHum, ({ title }) => {
+    Device.findOne({ title })
+      .populate("hum")
+      .then((device) => {
+        const data = device.hum[device.hum.length - 1].data;
+        socket.emit(events.resHum, { data });
       });
   });
 
   //웹에서 소켓을 이용한 LED ON/OFF 제어하기
-  socket.on(events.commandLed, createContentInstance);
+  socket.on(events.commandFan, createContentInstance);
 };

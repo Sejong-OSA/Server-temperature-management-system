@@ -9,14 +9,14 @@ export const getMe = async (req, res) => {
     const user = await User.findById(id);
     res.render("userDetail", { pageTitle: user.name, user });
   } catch (error) {
-    // req.flash("error", "Can't find your profile");
+    req.flash("error", "Can't find your profile");
     console.log(error);
     res.redirect(routes.home);
   }
 };
 
 export const logout = (req, res) => {
-  // req.flash("info", "Log out!!");
+  req.flash("info", "Log out!!");
   req.logout();
   res.redirect(routes.home);
 };
@@ -29,7 +29,7 @@ export const getEditProfile = async (req, res) => {
     const user = await User.findById(id);
     res.render("editProfile", { pageTitle: "editProfile", user });
   } catch (error) {
-    // req.flash("error", "Can't find your profile");
+    req.flash("error", "Can't find your profile");
     console.log(error);
     res.redirect(routes.home);
   }
@@ -48,10 +48,10 @@ export const postEditProfile = async (req, res) => {
       status,
       avatarUrl: file ? file.path : req.user.avatarUrl,
     });
-    // req.flash("success", "Edit success");
+    req.flash("success", "Edit success");
     res.redirect(routes.me);
   } catch (error) {
-    // req.flash("error", "Edit fail");
+    req.flash("error", "Edit fail");
     console.log(error);
     res.redirect(routes.editProfile);
   }
@@ -61,7 +61,7 @@ export const getChangePassword = async (req, res) => {
   try {
     res.render("changePassword", { pageTitle: "changePassword" });
   } catch (error) {
-    // req.flash("error", "Can't access the change-password page");
+    req.flash("error", "Can't access the change-password page");
     console.log(error);
     res.redirect(routes.home);
   }
@@ -79,10 +79,10 @@ export const postChangePassword = async (req, res) => {
   }
   try {
     await req.user.changePassword(oldPassword, newPassword);
-    // req.flash("success", "Change password success");
+    req.flash("success", "Change password success");
     res.redirect(routes.me);
   } catch (error) {
-    // req.flash("error", "Change password fail");
+    req.flash("error", "Change password fail");
     console.log("old password is incorrect");
     console.log(error);
     res.redirect(`/users${routes.changePassword}`);
