@@ -6,8 +6,8 @@ const LOGOUT = "/logout";
 const ME = "/me";
 
 // device
-const DEVICES = "/device";
-const UPLOAD = "/upload";
+const DEVICES = "/devices";
+const REGISTER = "/register";
 const DEVICE_DETAIL = "/:id";
 const EDIT_DEVICE = "/:id/edit-device";
 const DELETE_DEVICE = "/:id/delete-device";
@@ -27,7 +27,7 @@ const routes = {
 
   // device
   devices: DEVICES,
-  upload: UPLOAD,
+  register: REGISTER,
   deviceEDetail: (id) => {
     if (id) return `/devices/${id}`;
     return DEVICE_DETAIL;

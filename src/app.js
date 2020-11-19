@@ -69,7 +69,7 @@ app.use("/uploads", express.static("uploads"));
 
 app.use(routes.home, globalRouter);
 app.use(routes.users, userRouter);
-app.use(routes.device, deviceRouter);
+app.use(routes.devices, deviceRouter);
 
 const server = app.listen(PORT, handleListening);
 const io = socketIO(server);

@@ -1,0 +1,8 @@
+extends layouts/main
+
+block content
+  .form-container
+    form(action=`/devices${routes.register}`, method="post").upload-device
+      input(type="text", placeholder="Title" name="title" required=true)
+      textarea(placeholder="Description" name="description")
+      input(type="submit", value="Register Device")

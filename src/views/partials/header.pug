@@ -12,7 +12,9 @@ header
               a(href=routes.join) Join
           li.header__btn
             a(href=routes.login) Login
-        else          
+        else
+          li.header__btn
+            a(href=`/devices${routes.register}`) Register
           li.header__btn
             a(href=routes.me) Profile
           li.header__btn
