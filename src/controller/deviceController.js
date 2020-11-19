@@ -44,12 +44,38 @@ export const postRegister = async (req, res) => {
   }
 };
 
+export const postUpload = async (req, res) => {
+  const {
+    body: { title, description },
+    file: { location },
+    user: { id },
+  } = req;
+  try {
+    const newVideo = await Video.create({
+      title,
+      description,
+      videoUrl: location,
+      createdAt: getDate(),
+      creator: id,
+    });
+    req.user.videos.push(newVideo.id);
+    req.user.save();
+    req.flash("success", "Uploading the video success");
+    res.redirect(routes.videoDetail(newVideo.id));
+  } catch (error) {
+    console.log(error);
+    req.flash("error", "Can't upload the video");
+    res.redirect(routes.upload);
+  }
+};
+
 export const deviceDetail = async (req, res) => {
   const {
     params: { id },
   } = req;
   try {
-    const device = await Device.findById(id);
+    const device = await Device.findById(id).populate("temp").populate("hum");
+
     res.render("deviceDetail", {
       pageTitle: device.title,
       events: JSON.stringify(events),

@@ -19,6 +19,7 @@ import Temp from "../models/Temp";
 import Hum from "../models/Hum";
 import Fan1 from "../models/Fan1";
 import Fan2 from "../models/Fan2";
+import Device from "../models/Device";
 import { createContentInstance } from "../sockets/socketController";
 
 var fs = require("fs");
@@ -123,7 +124,6 @@ const mqtt_message_handler = async (topic, message) => {
       const sensorData = jsonObj.pc["m2m:sgn"].nev.rep["m2m:cin"].con;
       const dataType = jsonObj.pc["m2m:sgn"].sur.split("/");
       console.log("jsonObj()===============");
-      console.log(dataType[2]);
 
       const obj = {};
       const date = new Date();
@@ -142,39 +142,50 @@ const mqtt_message_handler = async (topic, message) => {
       console.log(obj);
 
       try {
+        const device = await Device.find({ title: conf.ae.name });
+
         if (obj.dataType === "temp") {
-          const temp = new Temp({
+          const newTemp = await Temp.create({
             dataType: obj.dataType,
             data: obj.data,
             created_at: obj.created_at,
           });
-          const saveTemp = await temp.save();
+
+          device[0].temp.push(newTemp.id);
+          device[0].save();
+
           console.log("insert OK");
           controlFan();
         } else if (obj.dataType === "hum") {
-          const hum = new Hum({
+          const newHum = await Hum.create({
             dataType: obj.dataType,
             data: obj.data,
             created_at: obj.created_at,
           });
-          const saveHum = await hum.save();
+          device[0].hum.push(newHum.id);
+          device[0].save();
+
           console.log("insert OK");
           controlFan();
         } else if (obj.dataType === "fan1") {
-          const fan1 = new Fan1({
+          const newFan1 = await Fan1.create({
             dataType: obj.dataType,
             data: obj.data,
             created_at: obj.created_at,
           });
-          const saveFan1 = await fan1.save();
+          device[0].fan1.push(newFan1.id);
+          device[0].save();
+
           console.log("insert OK");
         } else if (obj.dataType === "fan2") {
-          const fan2 = new Fan2({
+          const newFan2 = await Fan2.create({
             dataType: obj.dataType,
             data: obj.data,
             created_at: obj.created_at,
           });
-          const saveFan2 = await fan2.save();
+          device[0].fan2.push(newFan2.id);
+          device[0].save();
+
           console.log("insert OK");
         }
       } catch (err) {

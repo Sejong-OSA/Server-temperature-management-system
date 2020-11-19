@@ -8,6 +8,7 @@ import Device from "../models/Device";
 export const home = async (req, res) => {
   try {
     const devices = await Device.find({}).sort({ _id: -1 });
+
     res.render("home", {
       pageTitle: "home",
       events: JSON.stringify(events),

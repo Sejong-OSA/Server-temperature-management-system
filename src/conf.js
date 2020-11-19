@@ -35,7 +35,7 @@ cse.mqttport = "1883";
 cse.wsport = "7577";
 
 // build ae
-ae.name = "SERVER_ROOM2";
+ae.name = "SERVER_ROOM";
 
 ae.id = "S" + ae.name;
 
