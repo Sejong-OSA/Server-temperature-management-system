@@ -4,7 +4,6 @@ import events from "./events";
 import Device from "../models/Device";
 
 const cse = {};
-const ae = {};
 
 // build cse
 cse.host = "127.0.0.1";
@@ -12,9 +11,8 @@ cse.port = "7579";
 cse.name = "Mobius";
 
 // build ae
-ae.name = "SERVER_ROOM";
 
-export const createContentInstance = ({ data, actuator }) => {
+export const createContentInstance = ({ data, actuator, title }) => {
   const cseURL = `http://${cse.host}:${cse.port}`;
   const con = data;
   const cseRelease = "1";
@@ -24,7 +22,7 @@ export const createContentInstance = ({ data, actuator }) => {
   console.log("\n[REQUEST]");
 
   const options = {
-    uri: `${cseURL}/${cse.name}/${ae.name}/${actuator}`,
+    uri: `${cseURL}/${cse.name}/${title}/${actuator}`,
     method: "POST",
     headers: {
       "X-M2M-Origin": "S" + actuator,
@@ -64,21 +62,19 @@ export const createContentInstance = ({ data, actuator }) => {
 export const socketController = (socket, io) => {
   //웹에서 소켓을 이용한 DHT11 센서데이터 모니터링
   socket.on(events.reqTemp, ({ title }) => {
-    device = Device.findOne({ title })
+    Device.findOne({ title })
       .populate("temp")
       .then((device) => {
         const data = device.temp[device.temp.length - 1].data;
-
         socket.emit(events.resTemp, { data });
       });
   });
 
   socket.on(events.reqHum, ({ title }) => {
-    device = Device.findOne({ title })
+    Device.findOne({ title })
       .populate("hum")
       .then((device) => {
         const data = device.hum[device.hum.length - 1].data;
-
         socket.emit(events.resHum, { data });
       });
   });

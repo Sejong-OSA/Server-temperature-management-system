@@ -12,7 +12,13 @@ block content
       #jsFanStatus Fan Status : Fan Off
     .device__msg
       ul
-        li.temp Temperature: #{device.temp[device.temp.length - 1].data}°C
-        li.hum Humidity: #{device.hum[device.hum.length - 1].data}%
+        if device.temp[device.temp.length - 1] === undefined
+          li.temp Temperature: 0°C
+        else
+          li.temp Temperature: #{device.temp[device.temp.length - 1].data}°C
+        if device.hum[device.hum.length - 1] === undefined
+          li.temp Humidity: 0%
+        else
+          li.hum Humidity: #{device.hum[device.hum.length - 1].data}%
     #clock-container
       h4#jsClock 00:00

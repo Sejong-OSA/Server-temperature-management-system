@@ -10,7 +10,6 @@ const Fan2Schema = mongoose.Schema({
     required: true,
     default: 0,
   },
-
   created_at: {
     type: Date,
     default: Date.now,

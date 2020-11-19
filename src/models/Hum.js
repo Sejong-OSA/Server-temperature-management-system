@@ -8,8 +8,8 @@ const HumSchema = mongoose.Schema({
   data: {
     type: String,
     required: true,
+    default: 0,
   },
-
   created_at: {
     type: Date,
     default: Date.now,
