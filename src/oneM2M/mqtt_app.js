@@ -23,8 +23,6 @@ import { createContentInstance } from "../sockets/socketController";
 
 var fs = require("fs");
 var mqtt = require("mqtt");
-var xml2js = require("xml2js");
-var cbor = require("cbor");
 
 global.req_topic =
   "/oneM2M/req/" + conf.ae.id + conf.cse.id + "/" + conf.ae.bodytype;

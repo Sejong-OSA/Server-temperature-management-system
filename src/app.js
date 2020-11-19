@@ -17,7 +17,7 @@ import "./passport";
 import "./global";
 import "./db";
 import "./models/User";
-import "./oneM2M/mqtt_app";
+// import "./oneM2M/mqtt_app";
 
 import globalRouter from "./router/globalRouter";
 import deviceRouter from "./router/deviceRouter";

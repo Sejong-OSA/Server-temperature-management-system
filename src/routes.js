@@ -6,21 +6,16 @@ const LOGOUT = "/logout";
 const ME = "/me";
 
 // device
-const DEVICE = "/device";
+const DEVICES = "/device";
+const UPLOAD = "/upload";
+const DEVICE_DETAIL = "/:id";
+const EDIT_DEVICE = "/:id/edit-device";
+const DELETE_DEVICE = "/:id/delete-device";
 
 // users
 const USERS = "/users";
 const EDIT_PROFILE = "/edit-profile";
 const CHANGE_PASSWORD = "/change-password";
-const USER_DETAIL = "/:id";
-
-// Github
-const GITHUB = "/auth/github";
-const GITHUB_CALLBACK = "/auth/github/callback";
-
-// KakaoTalk
-const KAKAO = "/auth/kakao";
-const KAKAO_CALLBACK = "/auth/kakao/callback";
 
 const routes = {
   // global
@@ -31,15 +26,20 @@ const routes = {
   me: ME,
 
   // device
-  device: DEVICE,
-
-  // Github Login
-  github: GITHUB,
-  githubCallback: GITHUB_CALLBACK,
-
-  // Google Login
-  kakao: KAKAO,
-  kakaoCallback: KAKAO_CALLBACK,
+  devices: DEVICES,
+  upload: UPLOAD,
+  deviceEDetail: (id) => {
+    if (id) return `/devices/${id}`;
+    return DEVICE_DETAIL;
+  },
+  editDevice: (id) => {
+    if (id) return `/devices/${id}/edit-device`;
+    return EDIT_DEVICE;
+  },
+  deleteDevice: (id) => {
+    if (id) return `/devices/${id}/delete-device`;
+    return DELETE_DEVICE;
+  },
 
   // user
   users: USERS,
