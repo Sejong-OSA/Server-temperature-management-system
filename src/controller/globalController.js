@@ -3,12 +3,15 @@ import passport from "passport";
 import events from "../sockets/events";
 import routes from "../routes";
 import User from "../models/User";
+import Device from "../models/Device";
 
 export const home = async (req, res) => {
   try {
+    const devices = await Device.find({}).sort({ _id: -1 });
     res.render("home", {
       pageTitle: "home",
       events: JSON.stringify(events),
+      devices,
     });
   } catch (error) {
     console.log(error);

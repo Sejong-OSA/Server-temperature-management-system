@@ -1,0 +1,15 @@
+extends layouts/main
+
+block content
+  .home
+    .contorler
+      .fan
+        button#jsLedOn(name="1") Fan On
+        button#jsLedOff(name="0") Fan Off
+      #jsFanStatus Fan Status : Fan Off
+    .msg
+      ul
+        li.temp Temperature: 0
+        li.hum Humidity: 0
+    #clock-container
+      h4#jsClock 00:00

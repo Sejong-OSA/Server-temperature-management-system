@@ -28,7 +28,7 @@ const routes = {
   // device
   devices: DEVICES,
   register: REGISTER,
-  deviceEDetail: (id) => {
+  deviceDetail: (id) => {
     if (id) return `/devices/${id}`;
     return DEVICE_DETAIL;
   },
