@@ -54,4 +54,12 @@
       line-height: 1.5;
     }
   }
+  .deviceEdit {
+    button {
+      background-color: $organge;
+      &:active {
+        box-shadow: inset -10px 4px 5px $organge;
+      }
+    }
+  }
 }

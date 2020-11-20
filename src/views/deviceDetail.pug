@@ -20,5 +20,9 @@ block content
           li.temp Humidity: 0%
         else
           li.hum Humidity: #{device.hum[device.hum.length - 1].data}%
+      if loggedUser
     #clock-container
       h4#jsClock 00:00
+    .deviceEdit
+      a(href=routes.editDevice(device.id))
+        button Edit device

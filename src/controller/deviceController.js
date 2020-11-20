@@ -51,20 +51,20 @@ export const postUpload = async (req, res) => {
     user: { id },
   } = req;
   try {
-    const newVideo = await Video.create({
+    const newDevice = await Device.create({
       title,
       description,
-      videoUrl: location,
+      DeviceUrl: location,
       createdAt: getDate(),
       creator: id,
     });
-    req.user.videos.push(newVideo.id);
+    req.user.Devices.push(newDevice.id);
     req.user.save();
-    req.flash("success", "Uploading the video success");
-    res.redirect(routes.videoDetail(newVideo.id));
+    req.flash("success", "Uploading the Device success");
+    res.redirect(routes.DeviceDetail(newDevice.id));
   } catch (error) {
     console.log(error);
-    req.flash("error", "Can't upload the video");
+    req.flash("error", "Can't upload the Device");
     res.redirect(routes.upload);
   }
 };
@@ -86,4 +86,48 @@ export const deviceDetail = async (req, res) => {
     console.log(error);
     res.redirect(routes.home);
   }
+};
+
+export const getEditDevice = async (req, res) => {
+  const {
+    params: { id },
+  } = req;
+  try {
+    const device = await Device.findById(id);
+    res.render("editDevice", { pageTitle: "editDevice", device });
+  } catch (error) {
+    console.log(error);
+    req.flash("error", "Can't access the editing device page");
+    res.redirect(routes.home);
+  }
+};
+
+export const postEditDevice = async (req, res) => {
+  const {
+    body: { description },
+    params: { id },
+  } = req;
+  try {
+    await Device.findByIdAndUpdate(id, { description });
+    req.flash("success", "Editing the device success");
+    res.redirect(routes.deviceDetail(id));
+  } catch (error) {
+    console.log(error);
+    req.flash("error", "Can't edit the device");
+    res.render("editDevice", { pageTitle: "editDevice" });
+  }
+};
+
+export const deleteDevice = async (req, res) => {
+  const {
+    params: { id },
+  } = req;
+  try {
+    await Device.findByIdAndRemove(id);
+    req.flash("success", "Deleting the device success");
+  } catch (error) {
+    req.flash("error", "Can't delete the device");
+    console.log(error);
+  }
+  res.redirect(routes.home);
 };
