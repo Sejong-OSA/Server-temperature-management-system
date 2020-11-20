@@ -15,28 +15,30 @@
 
 // var util = require("util");
 // var url = require("url");
-import Temp from "../models/Temp";
-import Hum from "../models/Hum";
-import Fan1 from "../models/Fan1";
-import Fan2 from "../models/Fan2";
-import Device from "../models/Device";
-import { createContentInstance } from "../sockets/socketController";
+import Temp from "../../models/Temp";
+import Hum from "../../models/Hum";
+import Fan1 from "../../models/Fan1";
+import Fan2 from "../../models/Fan2";
+import Device from "../../models/Device";
+import { createContentInstance } from "../../sockets/socketController";
+
+import "./global";
 
 var fs = require("fs");
 var mqtt = require("mqtt");
 
-global.req_topic =
-  "/oneM2M/req/" + conf.ae.id + conf.cse.id + "/" + conf.ae.bodytype;
+global.DB_req_topic =
+  "/oneM2M/req/" + DB_conf.ae.id + DB_conf.cse.id + "/" + DB_conf.ae.bodytype;
 
-var reg_resp_topic = "/oneM2M/reg_resp/" + conf.ae.id + "/+/#";
-var resp_topic = "/oneM2M/resp/" + conf.ae.id + "/+/#";
-var noti_topic = "/oneM2M/req/+/" + conf.ae.id + "/#";
+var reg_resp_topic = "/oneM2M/reg_resp/" + DB_conf.ae.id + "/+/#";
+var resp_topic = "/oneM2M/resp/" + DB_conf.ae.id + "/+/#";
+var noti_topic = "/oneM2M/req/+/" + DB_conf.ae.id + "/#";
 
-global.sh_adn = require("./mqtt_adn");
-var noti = require("./noti");
+global.DB_sh_adn = require("./DB_mqtt_adn");
+var noti = require("./DB_noti");
 
 const controlFan = async () => {
-  const device = await Device.findOne({ title: conf.ae.name })
+  const device = await Device.findOne({ title: DB_conf.ae.name })
     .populate("temp")
     .populate("hum")
     .populate("fan1")
@@ -120,7 +122,7 @@ const controlFan = async () => {
 
 const mqtt_message_handler = async (topic, message) => {
   var topic_arr = topic.split("/");
-  var bodytype = conf.ae.bodytype;
+  var bodytype = DB_conf.ae.bodytype;
   let jsonObj = null;
   if (topic_arr[5] != null) {
     bodytype =
@@ -136,7 +138,7 @@ const mqtt_message_handler = async (topic, message) => {
   if (
     topic_arr[1] == "oneM2M" &&
     (topic_arr[2] == "resp" || topic_arr[2] == "reg_resp") &&
-    topic_arr[3].replace(":", "/") == conf.ae.id
+    topic_arr[3].replace(":", "/") == DB_conf.ae.id
   ) {
     // 'json'
     jsonObj = JSON.parse(message.toString());
@@ -149,7 +151,7 @@ const mqtt_message_handler = async (topic, message) => {
   } else if (
     topic_arr[1] == "oneM2M" &&
     topic_arr[2] == "req" &&
-    topic_arr[4] == conf.ae.id
+    topic_arr[4] == DB_conf.ae.id
   ) {
     // json
     jsonObj = JSON.parse(message.toString());
@@ -167,7 +169,7 @@ const mqtt_message_handler = async (topic, message) => {
       console.log(obj);
 
       try {
-        const device = await Device.find({ title: conf.ae.name });
+        const device = await Device.find({ title: DB_conf.ae.name });
 
         if (obj.dataType === "temp") {
           const newTemp = await Temp.create({
@@ -228,10 +230,10 @@ const mqtt_message_handler = async (topic, message) => {
   }
 };
 
-if (conf.usesecure === "disable") {
+if (DB_conf.usesecure === "disable") {
   var connectOptions = {
-    host: conf.cse.host,
-    port: conf.cse.mqttport,
+    host: DB_conf.cse.host,
+    port: DB_conf.cse.mqttport,
     //              username: 'keti',
     //              password: 'keti123',
     protocol: "mqtt",
@@ -247,7 +249,7 @@ if (conf.usesecure === "disable") {
 } else {
   connectOptions = {
     host: brokerip,
-    port: conf.cse.mqttport,
+    port: DB_conf.cse.mqttport,
     protocol: "mqtts",
     keepalive: 10,
     //              clientId: serverUID,
@@ -262,43 +264,43 @@ if (conf.usesecure === "disable") {
   };
 }
 
-mqtt_client = mqtt.connect(connectOptions);
+DB_mqtt_client = mqtt.connect(connectOptions);
 
-mqtt_client.on("connect", function () {
-  mqtt_client.subscribe(reg_resp_topic);
-  mqtt_client.subscribe(resp_topic);
-  mqtt_client.subscribe(noti_topic);
+DB_mqtt_client.on("connect", function () {
+  DB_mqtt_client.subscribe(reg_resp_topic);
+  DB_mqtt_client.subscribe(resp_topic);
+  DB_mqtt_client.subscribe(noti_topic);
 
   console.log("subscribe reg_resp_topic as " + reg_resp_topic);
   console.log("subscribe resp_topic as " + resp_topic);
   console.log("subscribe noti_topic as " + noti_topic);
 
-  sh_state = "crtae";
+  DB_sh_state = "crtae";
 });
 
-mqtt_client.on("message", mqtt_message_handler);
+DB_mqtt_client.on("message", mqtt_message_handler);
 
 function mqtt_callback(jsonObj) {
-  for (var i = 0; i < resp_mqtt_ri_arr.length; i++) {
-    if (resp_mqtt_ri_arr[i] == jsonObj["m2m:rsp"].rqi) {
-      var socket = socket_q[resp_mqtt_ri_arr[i]];
-      var to = resp_mqtt_path_arr[resp_mqtt_ri_arr[i]];
+  for (var i = 0; i < DB_resp_mqtt_ri_arr.length; i++) {
+    if (DB_resp_mqtt_ri_arr[i] == jsonObj["m2m:rsp"].rqi) {
+      var socket = DB_socket_q[DB_resp_mqtt_ri_arr[i]];
+      var to = DB_resp_mqtt_path_arr[DB_resp_mqtt_ri_arr[i]];
       console.log(to);
-      callback_q[resp_mqtt_ri_arr[i]](
+      callback_q[DB_resp_mqtt_ri_arr[i]](
         jsonObj["m2m:rsp"].rsc,
         jsonObj["m2m:rsp"].pc,
         to,
         socket
       );
-      delete callback_q[resp_mqtt_ri_arr[i]];
-      delete resp_mqtt_path_arr[resp_mqtt_ri_arr[i]];
-      resp_mqtt_ri_arr.splice(i, 1);
+      delete callback_q[DB_resp_mqtt_ri_arr[i]];
+      delete DB_resp_mqtt_path_arr[DB_resp_mqtt_ri_arr[i]];
+      DB_resp_mqtt_ri_arr.splice(i, 1);
       break;
     }
   }
 }
 
-sh_state = "connect";
+DB_sh_state = "connect";
 var return_count = 0;
 var request_count = 0;
 
@@ -307,33 +309,38 @@ function ae_response_action(status, result) {
 
   console.log("x-m2m-rsc : " + status + " - " + aeid + " <----");
 
-  mqtt_client.unsubscribe(reg_resp_topic);
-  mqtt_client.unsubscribe(resp_topic);
-  mqtt_client.unsubscribe(noti_topic);
+  DB_mqtt_client.unsubscribe(reg_resp_topic);
+  DB_mqtt_client.unsubscribe(resp_topic);
+  DB_mqtt_client.unsubscribe(noti_topic);
 
-  conf.ae.id = aeid;
+  DB_conf.ae.id = aeid;
 
-  //fs.writeFileSync('aei.json', JSON.stringify(conf.ae.id, null, 4), 'utf8');
+  //fs.writeFileSync('aei.json', JSON.stringify(DB_conf.ae.id, null, 4), 'utf8');
 
-  reg_resp_topic = "/oneM2M/reg_resp/" + conf.ae.id + "/+/#";
-  req_topic =
-    "/oneM2M/req/" + conf.ae.id + conf.cse.id + "/" + conf.ae.bodytype;
-  resp_topic = "/oneM2M/resp/" + conf.ae.id + "/+/#";
-  noti_topic = "/oneM2M/req" + conf.cse.id + "/" + conf.ae.id + "/#";
+  reg_resp_topic = "/oneM2M/reg_resp/" + DB_conf.ae.id + "/+/#";
+  DB_req_topic =
+    "/oneM2M/req/" + DB_conf.ae.id + DB_conf.cse.id + "/" + DB_conf.ae.bodytype;
+  resp_topic = "/oneM2M/resp/" + DB_conf.ae.id + "/+/#";
+  noti_topic = "/oneM2M/req" + DB_conf.cse.id + "/" + DB_conf.ae.id + "/#";
 
-  mqtt_client.subscribe(reg_resp_topic);
-  mqtt_client.subscribe(resp_topic);
-  mqtt_client.subscribe(noti_topic);
+  DB_mqtt_client.subscribe(reg_resp_topic);
+  DB_mqtt_client.subscribe(resp_topic);
+  DB_mqtt_client.subscribe(noti_topic);
 }
 
 function create_cnt_all(count, callback) {
-  sh_adn.crtct(count, function (rsc) {
+  DB_sh_adn.crtct(count, function (rsc) {
     console.log(
-      count + " - " + conf.cnt[count].name + " - x-m2m-rsc : " + rsc + " <----"
+      count +
+        " - " +
+        DB_conf.cnt[count].name +
+        " - x-m2m-rsc : " +
+        rsc +
+        " <----"
     );
     if (rsc == 5106 || rsc == 2001 || rsc == 4105) {
       count++;
-      if (conf.cnt.length > count) {
+      if (DB_conf.cnt.length > count) {
         create_cnt_all(count, function (rsc, count) {
           callback(rsc, count);
         });
@@ -347,9 +354,14 @@ function create_cnt_all(count, callback) {
 }
 
 function delete_sub_all(count, callback) {
-  sh_adn.delsub(count, function (rsc) {
+  DB_sh_adn.delsub(count, function (rsc) {
     console.log(
-      count + " - " + conf.sub[count].name + " - x-m2m-rsc : " + rsc + " <----"
+      count +
+        " - " +
+        DB_conf.sub[count].name +
+        " - x-m2m-rsc : " +
+        rsc +
+        " <----"
     );
     if (
       rsc == 5106 ||
@@ -359,7 +371,7 @@ function delete_sub_all(count, callback) {
       rsc == 4004
     ) {
       count++;
-      if (conf.sub.length > count) {
+      if (DB_conf.sub.length > count) {
         delete_sub_all(count, function (rsc, count) {
           callback(rsc, count);
         });
@@ -373,13 +385,18 @@ function delete_sub_all(count, callback) {
 }
 
 function create_sub_all(count, callback) {
-  sh_adn.crtsub(count, function (rsc) {
+  DB_sh_adn.crtsub(count, function (rsc) {
     console.log(
-      count + " - " + conf.sub[count].name + " - x-m2m-rsc : " + rsc + " <----"
+      count +
+        " - " +
+        DB_conf.sub[count].name +
+        " - x-m2m-rsc : " +
+        rsc +
+        " <----"
     );
     if (rsc == 5106 || rsc == 2001 || rsc == 4105) {
       count++;
-      if (conf.sub.length > count) {
+      if (DB_conf.sub.length > count) {
         create_sub_all(count, function (rsc, count) {
           callback(rsc, count);
         });
@@ -393,74 +410,74 @@ function create_sub_all(count, callback) {
 }
 
 function mqtt_watchdog() {
-  if (sh_state == "connect") {
-  } else if (sh_state == "crtae") {
-    console.log("[sh_state] : " + sh_state);
+  if (DB_sh_state == "connect") {
+  } else if (DB_sh_state == "crtae") {
+    console.log("[DB_sh_state] : " + DB_sh_state);
 
-    sh_adn.crtae(function (status, res_body) {
+    DB_sh_adn.crtae(function (status, res_body) {
       if (status == 2001) {
         ae_response_action(status, res_body);
-        sh_state = "crtct";
+        DB_sh_state = "crtct";
       } else if (status == 5106 || status == 4105) {
         console.log("x-m2m-rsc : " + status + " <----");
-        sh_state = "rtvae";
+        DB_sh_state = "rtvae";
       }
     });
-  } else if (sh_state == "rtvae") {
-    console.log("[sh_state] : " + sh_state);
-    sh_adn.rtvae(function (status, res_body) {
+  } else if (DB_sh_state == "rtvae") {
+    console.log("[DB_sh_state] : " + DB_sh_state);
+    DB_sh_adn.rtvae(function (status, res_body) {
       if (status == 2000) {
         var aeid = res_body["m2m:ae"]["aei"];
         console.log("x-m2m-rsc : " + status + " - " + aeid + " <----");
 
-        if (conf.ae.id != aeid && conf.ae.id != "/" + aeid) {
+        if (DB_conf.ae.id != aeid && DB_conf.ae.id != "/" + aeid) {
           console.log(
             "AE-ID created is " +
               aeid +
               " not equal to device AE-ID is " +
-              conf.ae.id
+              DB_conf.ae.id
           );
         } else {
-          sh_state = "crtct";
+          DB_sh_state = "crtct";
         }
       } else {
         console.log("x-m2m-rsc : " + status + " <----");
       }
     });
-  } else if (sh_state == "crtct") {
-    console.log("[sh_state] : " + sh_state);
+  } else if (DB_sh_state == "crtct") {
+    console.log("[DB_sh_state] : " + DB_sh_state);
     request_count = 0;
     return_count = 0;
 
     create_cnt_all(0, function (status, count) {
-      if (conf.cnt.length <= count) {
-        sh_state = "delsub";
+      if (DB_conf.cnt.length <= count) {
+        DB_sh_state = "delsub";
       }
     });
-  } else if (sh_state == "delsub") {
-    console.log("[sh_state] : " + sh_state);
+  } else if (DB_sh_state == "delsub") {
+    console.log("[DB_sh_state] : " + DB_sh_state);
     request_count = 0;
     return_count = 0;
 
     delete_sub_all(0, function (status, count) {
-      if (conf.sub.length <= count) {
-        sh_state = "crtsub";
+      if (DB_conf.sub.length <= count) {
+        DB_sh_state = "crtsub";
       }
     });
-  } else if (sh_state == "crtsub") {
-    console.log("[sh_state] : " + sh_state);
+  } else if (DB_sh_state == "crtsub") {
+    console.log("[DB_sh_state] : " + DB_sh_state);
     request_count = 0;
     return_count = 0;
 
     create_sub_all(0, function (status, count) {
-      if (conf.sub.length <= count) {
-        sh_state = "crtci";
+      if (DB_conf.sub.length <= count) {
+        DB_sh_state = "crtci";
 
         // tas.ready();
       }
     });
-  } else if (sh_state == "crtci") {
+  } else if (DB_sh_state == "crtci") {
   }
 }
 
-wdt.set_wdt(require("shortid").generate(), 2, mqtt_watchdog);
+DB_wdt.set_wdt(require("shortid").generate(), 2, mqtt_watchdog);

@@ -1,17 +1,17 @@
 const temp = document.querySelector(".temp");
 const hum = document.querySelector(".hum");
-const ledStatus = document.getElementById("jsFanStatus");
+const fanStatus = document.getElementById("jsFanStatus");
 
 let tempValue = 0;
 let humValue = 0;
 
-const handleLedStatus = () => {
+const handleFanStatus = () => {
   if (tempValue >= 26 || tempValue <= 18) {
-    ledStatus.innerHTML = `Fan Status : Fan On`;
+    fanStatus.innerHTML = `Fan Status : Fan On`;
   } else if (humValue >= 60 || humValue <= 40) {
-    ledStatus.innerHTML = `Fan Status : Fan On`;
+    fanStatus.innerHTML = `Fan Status : Fan On`;
   } else {
-    ledStatus.innerHTML = `Fan Status : Fan Off`;
+    fanStatus.innerHTML = `Fan Status : Fan Off`;
   }
 };
 
@@ -24,7 +24,7 @@ export const handleTemp = ({ data }) => {
   } else {
     temp.classList.remove("warn");
   }
-  handleLedStatus();
+  handleFanStatus();
 };
 
 export const handleHum = ({ data }) => {
