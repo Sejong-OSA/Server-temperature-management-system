@@ -117,3 +117,17 @@ export const postEditDevice = async (req, res) => {
     res.render("editDevice", { pageTitle: "editDevice" });
   }
 };
+
+export const deleteDevice = async (req, res) => {
+  const {
+    params: { id },
+  } = req;
+  try {
+    await Device.findByIdAndRemove(id);
+    req.flash("success", "Deleting the device success");
+  } catch (error) {
+    req.flash("error", "Can't delete the device");
+    console.log(error);
+  }
+  res.redirect(routes.home);
+};

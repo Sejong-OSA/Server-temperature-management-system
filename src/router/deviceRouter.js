@@ -7,6 +7,7 @@ import {
   getRegister,
   postEditDevice,
   postRegister,
+  deleteDevice,
 } from "../controller/deviceController";
 
 const deviceRouter = express.Router();
@@ -20,5 +21,7 @@ deviceRouter.get(routes.deviceDetail(), deviceDetail);
 // edit
 deviceRouter.get(routes.editDevice(), onlyPrivate, getEditDevice);
 deviceRouter.post(routes.editDevice(), onlyPrivate, postEditDevice);
+
+deviceRouter.get(routes.deleteDevice(), onlyPrivate, deleteDevice);
 
 export default deviceRouter;
