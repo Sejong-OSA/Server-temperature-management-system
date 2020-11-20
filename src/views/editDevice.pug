@@ -1,0 +1,10 @@
+extends layouts/main
+
+block content
+  .form-container
+    h1.editDevice__title #{device.title}
+    form(action=routes.editDevice(device.id), method="post").edit-device
+      textarea(placeholder="Description" name="description")=device.description
+      input(type="submit", value="Update Device")
+    a(href=routes.deleteDevice(device.id)).form-container__link
+      button.delete-btn Delete device
