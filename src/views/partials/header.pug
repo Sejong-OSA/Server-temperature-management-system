@@ -10,8 +10,9 @@ header
           if !userExisted
             li.header__btn
               a(href=routes.join) Join
-          li.header__btn
-            a(href=routes.login) Login
+          else
+            li.header__btn
+              a(href=routes.login) Login
         else
           li.header__btn
             a(href=`/devices${routes.register}`) Register

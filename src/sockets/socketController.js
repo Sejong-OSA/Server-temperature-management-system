@@ -6,7 +6,7 @@ import Device from "../models/Device";
 const cse = {};
 
 // build cse
-cse.host = "127.0.0.1";
+cse.host = "127.0.0.1"; // Always check
 cse.port = "7579";
 cse.name = "Mobius";
 

@@ -1,6 +1,7 @@
 import routes from "../routes";
 import Device from "../models/Device";
 import events from "../sockets/events";
+// import { createAE } from "./oneM2MCrt";
 
 export const getDate = () => {
   const date = new Date();
@@ -35,6 +36,7 @@ export const postRegister = async (req, res) => {
       description,
       createdAt: getDate(),
     });
+    // createAE(title);
     req.flash("success", "Registering the device success");
     res.redirect(routes.deviceDetail(newDevice.id));
   } catch (error) {
