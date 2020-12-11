@@ -56,7 +56,7 @@ const controlFan = async () => {
 
   if (!fan1 && !fan2) {
     console.log("fan1 and fan2 are false");
-    if (temp >= 28 || temp <= 16 || hum >= 63 || hum <= 38) {
+    if (temp >= 28 || temp <= 16 || hum >= 43 || hum <= 13) {
       createContentInstance({
         data: "1",
         actuator: "fan1",
@@ -67,7 +67,7 @@ const controlFan = async () => {
         actuator: "fan2",
         title: device.title,
       });
-    } else if (temp >= 26 || temp <= 18 || hum >= 60 || hum <= 40) {
+    } else if (temp >= 26 || temp <= 18 || hum >= 40 || hum <= 15) {
       createContentInstance({
         data: "1",
         actuator: "fan1",
@@ -78,13 +78,13 @@ const controlFan = async () => {
     }
   } else if (fan1 && !fan2) {
     console.log("fan1 or fan2 are false");
-    if (temp >= 28 || temp <= 16 || hum >= 63 || hum <= 38) {
+    if (temp >= 28 || temp <= 16 || hum >= 43 || hum <= 13) {
       createContentInstance({
         data: "1",
         actuator: "fan2",
         title: device.title,
       });
-    } else if (temp >= 26 || temp <= 18 || hum >= 60 || hum <= 40) {
+    } else if (temp >= 26 || temp <= 18 || hum >= 40 || hum <= 15) {
       return;
     } else {
       createContentInstance({
@@ -95,9 +95,9 @@ const controlFan = async () => {
     }
   } else {
     console.log("fan1 and fan2 are true");
-    if (temp >= 28 || temp <= 16 || hum >= 63 || hum <= 38) {
+    if (temp >= 28 || temp <= 16 || hum >= 43 || hum <= 13) {
       return;
-    } else if (temp >= 26 || temp <= 18 || hum >= 60 || hum <= 40) {
+    } else if (temp >= 26 || temp <= 18 || hum >= 40 || hum <= 15) {
       createContentInstance({
         data: "0",
         actuator: "fan2",
@@ -180,7 +180,7 @@ const mqtt_message_handler = async (topic, message) => {
           await device[0].save();
 
           console.log("insert OK");
-          controlFan();
+          if (fanAuto) controlFan();
         } else if (obj.dataType === "hum") {
           const newHum = await Hum.create({
             dataType: obj.dataType,
@@ -191,7 +191,7 @@ const mqtt_message_handler = async (topic, message) => {
           await device[0].save();
 
           console.log("insert OK");
-          controlFan();
+          if (fanAuto) controlFan();
         } else if (obj.dataType === "fan1") {
           const newFan1 = await Fan1.create({
             dataType: obj.dataType,

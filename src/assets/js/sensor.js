@@ -8,7 +8,7 @@ let humValue = 0;
 const handleFanStatus = () => {
   if (tempValue >= 26 || tempValue <= 18) {
     fanStatus.innerHTML = `Fan Status : Fan On`;
-  } else if (humValue >= 60 || humValue <= 40) {
+  } else if (humValue >= 40 || humValue <= 15) {
     fanStatus.innerHTML = `Fan Status : Fan On`;
   } else {
     fanStatus.innerHTML = `Fan Status : Fan Off`;
@@ -31,7 +31,7 @@ export const handleHum = ({ data }) => {
   humValue = data;
   hum.innerHTML = `Humidity: ${data}%`;
 
-  if (humValue >= 60 || humValue <= 40) {
+  if (humValue >= 40 || humValue <= 15) {
     hum.classList.add("warn");
   } else {
     hum.classList.remove("warn");

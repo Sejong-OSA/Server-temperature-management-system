@@ -46,31 +46,6 @@ export const postRegister = async (req, res) => {
   }
 };
 
-export const postUpload = async (req, res) => {
-  const {
-    body: { title, description },
-    file: { location },
-    user: { id },
-  } = req;
-  try {
-    const newDevice = await Device.create({
-      title,
-      description,
-      DeviceUrl: location,
-      createdAt: getDate(),
-      creator: id,
-    });
-    req.user.Devices.push(newDevice.id);
-    req.user.save();
-    req.flash("success", "Uploading the Device success");
-    res.redirect(routes.DeviceDetail(newDevice.id));
-  } catch (error) {
-    console.log(error);
-    req.flash("error", "Can't upload the Device");
-    res.redirect(routes.upload);
-  }
-};
-
 export const deviceDetail = async (req, res) => {
   const {
     params: { id },

@@ -6,7 +6,7 @@ import Device from "../models/Device";
 const cse = {};
 
 // build cse
-cse.host = "127.0.0.1"; // Always check
+cse.host = "125.130.139.190"; // Always check
 cse.port = "7579";
 cse.name = "Mobius";
 
@@ -78,6 +78,12 @@ export const socketController = (socket, io) => {
       });
   });
 
-  //웹에서 소켓을 이용한 LED ON/OFF 제어하기
+  //웹에서 소켓을 이용한 Fan ON/OFF 제어하기
   socket.on(events.commandFan, createContentInstance);
+  socket.on(events.commandFan, () => {
+    fanAuto = false;
+  });
+  socket.on(events.fanAuto, () => {
+    fanAuto = true;
+  });
 };

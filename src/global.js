@@ -14,3 +14,4 @@ global.sh_state = "crtae";
 // global.wdt = require("./wdt");
 
 global.mqtt_client = null;
+global.fanAuto = null;
