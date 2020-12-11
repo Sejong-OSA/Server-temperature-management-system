@@ -1,6 +1,7 @@
 import routes from "../routes";
 import Device from "../models/Device";
 import events from "../sockets/events";
+// import { createAE } from "./oneM2MCrt";
 
 export const getDate = () => {
   const date = new Date();
@@ -35,37 +36,13 @@ export const postRegister = async (req, res) => {
       description,
       createdAt: getDate(),
     });
+    // createAE(title);
     req.flash("success", "Registering the device success");
     res.redirect(routes.deviceDetail(newDevice.id));
   } catch (error) {
     console.log(error);
     req.flash("error", "Can't register the device");
     res.redirect(routes.register);
-  }
-};
-
-export const postUpload = async (req, res) => {
-  const {
-    body: { title, description },
-    file: { location },
-    user: { id },
-  } = req;
-  try {
-    const newDevice = await Device.create({
-      title,
-      description,
-      DeviceUrl: location,
-      createdAt: getDate(),
-      creator: id,
-    });
-    req.user.Devices.push(newDevice.id);
-    req.user.save();
-    req.flash("success", "Uploading the Device success");
-    res.redirect(routes.DeviceDetail(newDevice.id));
-  } catch (error) {
-    console.log(error);
-    req.flash("error", "Can't upload the Device");
-    res.redirect(routes.upload);
   }
 };
 
